@@ -10,6 +10,7 @@ package org.swiftsuspenders.typedescriptions;
 import org.swiftsuspenders.Injector;
 import org.swiftsuspenders.utils.CallProxy;
 
+@:keepSub
 class NoParamsConstructorInjectionPoint extends ConstructorInjectionPoint
 {
 	public function new()

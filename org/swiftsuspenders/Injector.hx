@@ -164,6 +164,7 @@ import org.swiftsuspenders.utils.TypeDescriptor;
  * The <code>Injector</code> manages the mappings and acts as the central hub from which all
  * injections are started.
  */
+@:keepSub
 class Injector extends EventDispatcher
 {
 	//----------------------       Private / Protected Properties       ----------------------//

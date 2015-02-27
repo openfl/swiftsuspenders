@@ -7,6 +7,7 @@
 
 package org.swiftsuspenders.dependencyproviders;
 
+@:keepSub
 interface FallbackDependencyProvider extends DependencyProvider
 {
 	/**

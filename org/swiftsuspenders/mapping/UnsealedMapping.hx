@@ -7,6 +7,7 @@
 
 package org.swiftsuspenders.mapping;
 
+@:keepSub
 interface UnsealedMapping
 {
 	/**

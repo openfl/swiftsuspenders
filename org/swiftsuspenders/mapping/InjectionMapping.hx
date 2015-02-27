@@ -18,6 +18,7 @@ import org.swiftsuspenders.dependencyproviders.SoftDependencyProvider;
 import org.swiftsuspenders.dependencyproviders.ValueProvider;
 import org.swiftsuspenders.errors.InjectorError;
 
+@:keepSub
 class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 {
 	//----------------------       Private / Protected Properties       ----------------------//

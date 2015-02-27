@@ -7,6 +7,7 @@
 
 package org.swiftsuspenders.typedescriptions;
 
+@:keepSub
 class OrderedInjectionPoint extends MethodInjectionPoint
 {
 	//----------------------              Public Properties             ----------------------//

@@ -11,6 +11,7 @@ import org.swiftsuspenders.utils.CallProxy;
 //import flash.utils.Proxy;
 //import flash.utils.getDefinitionByName;
 
+@:keepSub
 class ReflectorBase
 {
 	//----------------------              Public Properties             ----------------------//

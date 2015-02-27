@@ -9,6 +9,7 @@ package org.swiftsuspenders.reflection;
 
 import org.swiftsuspenders.typedescriptions.TypeDescription;
 
+@:keepSub
 interface Reflector
 {
 	function getClass(value:Dynamic):Class<Dynamic>;

@@ -7,6 +7,7 @@
 
 package org.swiftsuspenders.typedescriptions;
 
+@:keepSub
 class PreDestroyInjectionPoint extends OrderedInjectionPoint
 {
 	//----------------------               Public Methods               ----------------------//

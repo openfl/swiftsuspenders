@@ -9,6 +9,7 @@ package org.swiftsuspenders;
 
 import openfl.events.Event;
 
+@:keepSub
 class InjectionEvent extends Event
 {
 	//----------------------              Public Properties             ----------------------//

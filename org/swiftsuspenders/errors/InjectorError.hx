@@ -9,6 +9,7 @@ package org.swiftsuspenders.errors;
 
 import openfl.errors.Error;
 
+@:keepSub
 class InjectorError extends Error
 {
 	public function new(message:Dynamic="", id:Dynamic=0)

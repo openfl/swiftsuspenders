@@ -12,6 +12,8 @@ import openfl.errors.Error;
 /**
  * Utility for generating unique object IDs
  */
+
+@:keepSub
 class UID
 {
 

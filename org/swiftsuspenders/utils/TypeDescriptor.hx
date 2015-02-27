@@ -10,6 +10,7 @@ package org.swiftsuspenders.utils;
 import org.swiftsuspenders.reflection.Reflector;
 import org.swiftsuspenders.typedescriptions.TypeDescription;
 
+@:keepSub
 class TypeDescriptor
 {
 	//----------------------       Private / Protected Properties       ----------------------//

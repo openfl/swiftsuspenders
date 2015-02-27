@@ -4,6 +4,7 @@ package org.swiftsuspenders.utils;
  * ...
  * @author P.J.Shand
  */
+@:keepSub
 class CallProxy
 {
 

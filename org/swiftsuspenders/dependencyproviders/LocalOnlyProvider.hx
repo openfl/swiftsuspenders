@@ -7,6 +7,7 @@
 
 package org.swiftsuspenders.dependencyproviders;
 
+@:keepSub
 class LocalOnlyProvider extends ForwardingProvider
 {
 	public function new(provider:DependencyProvider)

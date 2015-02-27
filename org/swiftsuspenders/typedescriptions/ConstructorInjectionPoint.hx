@@ -12,6 +12,7 @@ import openfl.errors.Error;
 import org.swiftsuspenders.Injector;
 import org.swiftsuspenders.utils.CallProxy;
 
+@:keepSub
 class ConstructorInjectionPoint extends MethodInjectionPoint
 {
 	//----------------------               Public Methods               ----------------------//

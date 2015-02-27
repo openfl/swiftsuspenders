@@ -11,6 +11,7 @@ package org.swiftsuspenders.typedescriptions;
 
 import org.swiftsuspenders.Injector;
 
+@:keepSub
 class InjectionPoint
 {
 	//----------------------              Public Properties             ----------------------//

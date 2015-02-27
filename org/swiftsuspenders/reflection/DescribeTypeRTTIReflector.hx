@@ -24,6 +24,7 @@ import org.swiftsuspenders.typedescriptions.PreDestroyInjectionPoint;
 import org.swiftsuspenders.typedescriptions.PropertyInjectionPoint;
 import org.swiftsuspenders.typedescriptions.TypeDescription;
 
+@:keepSub
 @:rtti
 class DescribeTypeRTTIReflector extends ReflectorBase implements Reflector
 {

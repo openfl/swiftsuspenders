@@ -7,10 +7,9 @@
 
 package org.swiftsuspenders.dependencyproviders;
 
-
-
 import org.swiftsuspenders.Injector;
 
+@:keepSub
 class ClassProvider implements DependencyProvider
 {
 	//----------------------       Private / Protected Properties       ----------------------//

@@ -12,6 +12,7 @@ package org.swiftsuspenders.typedescriptions;
 import org.swiftsuspenders.errors.InjectorError;
 import org.swiftsuspenders.utils.CallProxy;
 
+@:keepSub
 class TypeDescription
 {
 	//----------------------              Public Properties             ----------------------//

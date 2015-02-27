@@ -7,11 +7,10 @@
 
 package org.swiftsuspenders.dependencyproviders;
 
-
-
 import org.swiftsuspenders.mapping.InjectionMapping;
 import org.swiftsuspenders.Injector;
 
+@:keepSub
 class OtherMappingProvider implements DependencyProvider
 {
 	//----------------------       Private / Protected Properties       ----------------------//

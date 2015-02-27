@@ -14,6 +14,7 @@ import org.swiftsuspenders.errors.InjectorMissingMappingError;
 import org.swiftsuspenders.dependencyproviders.DependencyProvider;
 import org.swiftsuspenders.utils.CallProxy;
 
+@:keepSub
 class PropertyInjectionPoint extends InjectionPoint
 {
 	//----------------------       Private / Protected Properties       ----------------------//

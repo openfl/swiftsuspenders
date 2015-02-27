@@ -7,12 +7,11 @@
 
 package org.swiftsuspenders.dependencyproviders;
 
-
-
 import org.swiftsuspenders.Injector;
 import org.swiftsuspenders.errors.InjectorError;
 import org.swiftsuspenders.utils.CallProxy;
 
+@:keepSub
 class SingletonProvider implements DependencyProvider
 {
 	//----------------------       Private / Protected Properties       ----------------------//

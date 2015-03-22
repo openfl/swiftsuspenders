@@ -35,10 +35,24 @@ class UID
 	public static function create(source:Dynamic = null):String
 	{
 		var className = UID.classID(source);
+		var random:Int = Math.floor(Math.random() * 255);
+		//trace("source = " + source);
+		var returnVal:String = "";// (source ? source + '-':'');
+		if (source != null) returnVal = className;
+		//returnVal = returnVal + _i;
+		//_i = _i + 1;
+		returnVal += '-';
+		returnVal += random;
+		
+		//trace("returnVal = " + returnVal);
+		
+		return returnVal;
+		
+		/*var className = UID.classID(source);
 		return (source ? source + '-':'')
 			+ StringTools.hex(_i++, 16)
 			+ '-'
-			+ StringTools.hex(Math.floor(Math.random() * 255), 16);
+			+ StringTools.hex(Math.floor(Math.random() * 255), 16);*/
 	}
 	
 	public static function classID(source:Dynamic):String

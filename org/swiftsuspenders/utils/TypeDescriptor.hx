@@ -28,10 +28,17 @@ class TypeDescriptor
 	public function getDescription(type:Class<Dynamic>):TypeDescription
 	{
 		var id = UID.classID(type);
+		
+		//trace("id = " + id);
+		//trace("type = " + type);
+		
 		//get type description or cache it if the given type wasn't encountered before
 		if (_descriptionsCache[id] == null) {
+			
 			_descriptionsCache[id] = _reflector.describeInjections(type);
+			
 		}
+		
 		//_descriptionsCache[type] = _descriptionsCache[type] || _reflector.describeInjections(type);
 		return _descriptionsCache[id];
 	}

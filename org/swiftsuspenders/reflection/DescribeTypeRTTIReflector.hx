@@ -26,7 +26,7 @@ import org.swiftsuspenders.typedescriptions.TypeDescription;
 
 @:keepSub
 @:rtti
-class DescribeTypeRTTIReflector extends ReflectorBase implements Reflector
+class DescribeTypeRTTIReflector implements Reflector
 {
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _currentFactoryXML:Xml;
@@ -40,8 +40,64 @@ class DescribeTypeRTTIReflector extends ReflectorBase implements Reflector
 	
 	public function new()
 	{
-		super();
+		
 	}
+	
+	public function getClass(value:Dynamic):Class<Dynamic>
+	{
+		/*
+		 There are several types for which the 'constructor' property doesn't work:
+		 - instances of Proxy, Xml and XMLList throw exceptions when trying to access 'constructor'
+		 - instances of Vector, always returns Array<Dynamic> as their constructor except numeric vectors
+		 - for numeric vectors 'value is Array<Dynamic>' wont work, but 'value.constructor' will return correct result
+		 - Int and UInt return Float as their constructor
+		 For these, we have to fall back to more verbose ways of getting the constructor.
+		 */
+		if (Std.is(value, Xml))
+		{
+			return Xml;
+		}
+		else if (Std.is(value, Array))
+		{
+			return Array;
+		}
+		
+		#if cpp
+			return Type.getClass(value);
+		#else
+			return value.constructor;
+		#end
+	}
+
+	public function getFQCN(value :Dynamic, replaceColons:Bool = false):String
+	{
+		var fqcn:String;
+		if (Std.is(value, String))
+		{
+			fqcn = value;
+			// Add colons if missing and desired.
+			if (!replaceColons && fqcn.indexOf('::') == -1)
+			{
+				var lastDotIndex:Int = fqcn.lastIndexOf('.');
+				if (lastDotIndex == -1)
+				{
+					return fqcn;
+				}
+				return fqcn.substring(0, lastDotIndex) + '::' +
+						fqcn.substring(lastDotIndex + 1);
+			}
+		}
+		else
+		{
+			fqcn = CallProxy.replaceClassName(value);
+		}
+		
+		if (replaceColons == true) {
+			return fqcn.split('::').join('.');
+		}
+		return fqcn;
+	}
+	
 	//----------------------               Public Methods               ----------------------//
 	public function typeImplements(type:Class<Dynamic>, superType:Class<Dynamic>):Bool
 	{
@@ -100,7 +156,9 @@ class DescribeTypeRTTIReflector extends ReflectorBase implements Reflector
 		
 		rtti = untyped type.__rtti;
 		if (rtti == null) {
-			if (!isInterface(type)) trace("Warning: " + CallProxy.getClassName(type) + " missing @:rtti matadata");
+			if (!isInterface(type)) {
+				trace("Warning: " + CallProxy.getClassName(type) + " missing @:rtti matadata");
+			}
 		}
 		
 		if (rtti != null) {
@@ -116,7 +174,6 @@ class DescribeTypeRTTIReflector extends ReflectorBase implements Reflector
 					extendTypeDescription = extendDescribeTypeReflector.describeInjections(extendClass);
 				}
 			}
-			
 		}
 		
 		var description:TypeDescription = new TypeDescription(false);
@@ -225,15 +282,19 @@ class DescribeTypeRTTIReflector extends ReflectorBase implements Reflector
 		var fields = Reflect.fields(metaFields);
 		var injectFields:Array<String> = [];
 		
-		for (value in fields) {
+		
+		
+		for (value in fields)
+		{
 			
 			var metaFields1 = Reflect.getProperty(metaFields, value);
 			var fields1 = Reflect.fields(metaFields1);
 			if (fields1[0] == 'inject') {
 				injectFields.push(value);
 			}
+			
+			
 		}
-		
 		
 		if (extendTypeDescription != null) {
 			description.injectionPoints = extendTypeDescription.injectionPoints;
@@ -403,37 +464,5 @@ class DescribeTypeRTTIReflector extends ReflectorBase implements Reflector
 		}
 		
 		return injectionPoints;
-	}
-
-	private function createDummyInstance(constructorNode:Xml, clazz:Class<Dynamic>):Void
-	{
-		// FIX
-		/*try
-		{
-			switch (constructorNode.children().length())
-			{
-				case 0 :(Type.createInstance(clazz, null));
-				case 1 :(Type.createInstance(clazz, [null]));
-				case 2 :(Type.createInstance(clazz, [null, null]));
-				case 3 :(Type.createInstance(clazz, [null, null, null]));
-				case 4 :(Type.createInstance(clazz, [null, null, null, null]));
-				case 5 :(Type.createInstance(clazz, [null, null, null, null, null]));
-				case 6 :(Type.createInstance(clazz, [null, null, null, null, null, null]));
-				case 7 :(Type.createInstance(clazz, [null, null, null, null, null, null, null]));
-				case 8 :(Type.createInstance(clazz, [null, null, null, null, null, null, null, null]));
-				case 9 :(Type.createInstance(clazz, [null, null, null, null, null, null, null, null, null]));
-				case 10 :(Type.createInstance(clazz, [null, null, null, null, null, null, null, null, null, null]));
-			}
-		}
-		catch (error:Error)
-		{
-			trace('Exception caught while trying to create dummy instance for constructor ' +
-					'injection. It\'s almost certainly ok to ignore this exception, but you ' +
-					'might want to restructure your constructor to prevent errors from ' +
-					'happening. See the Swiftsuspenders documentation for more details.\n' +
-					'The caught exception was:\n' + error);
-		}*/
-		// FIX
-		//constructorNode.setChildren(describeType(clazz).factory.constructor[0].children());
 	}
 }

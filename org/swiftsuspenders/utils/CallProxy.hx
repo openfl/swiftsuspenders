@@ -35,8 +35,7 @@ class CallProxy
 			fields = Type.getInstanceFields(clazz);
 		}
 		else {
-			fields = Reflect.fields(o);
-			
+			fields = Reflect.fields(o);	
 		}
 		
 		for (i in 0...fields.length) 
@@ -44,7 +43,7 @@ class CallProxy
 			if (fields[i] == field) return true;
 		}
 		
-		#if js
+		#if (js || cpp)
 			var f:Dynamic = Reflect.getProperty(o, field);
 			var isFunction = Reflect.isFunction(f);
 			var isObject = Reflect.isObject(f);

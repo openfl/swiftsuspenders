@@ -21,11 +21,10 @@ class FactoryProvider implements DependencyProvider
 		_factoryClass = factoryClass;
 	}
 
-	public function apply(
-		targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic
+	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic
 	{
-		return DependencyProvider(activeInjector.getInstance(_factoryClass))
-				.apply(targetType, activeInjector, injectParameters);
+		var dependencyProvider:DependencyProvider = cast(activeInjector.getInstance(_factoryClass));
+		return dependencyProvider.apply(targetType, activeInjector, injectParameters);
 	}
 
 	public function destroy():Void

@@ -1,0 +1,7 @@
+-swf bin/openfl-swiftsuspenders.swc
+-cp src
+-lib openfl
+-dce no
+-swf-version 12
+-D stage3Donly
+--macro include('org.swiftsuspenders')

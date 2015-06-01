@@ -1,1 +1,5 @@
 src/openfl-swiftsuspenders.zip
+
+# Intellij project files
+/.idea
+/*.iml

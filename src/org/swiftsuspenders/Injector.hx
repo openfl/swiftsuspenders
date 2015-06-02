@@ -206,7 +206,7 @@ class Injector extends EventDispatcher
 	
 	//private var _applicationDomain:ApplicationDomain;
 	@:isVar public var applicationDomain(get, set):ApplicationDomain;
-	function set_applicationDomain(applicationDomain:ApplicationDomain = null):ApplicationDomain
+	function set_applicationDomain(applicationDomain:ApplicationDomain):ApplicationDomain
 	{
 		if (applicationDomain != null) this.applicationDomain = applicationDomain;
 		else this.applicationDomain = ApplicationDomain.currentDomain;

@@ -31,16 +31,18 @@ class DescribeTypeRTTIReflector implements Reflector
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _currentFactoryXML:Xml;
 	private var _currentFactoryXMLFast:Fast;
-	var constructorElem:Fast;
-	var rtti:String;
-	var extendPath:String;
+	private var constructorElem:Fast;
+	private var rtti:String;
+	private var extendPath:String;
+	private var whitelist = new Map<String, Bool>();
 	
 	private var extendDescribeTypeReflector:DescribeTypeRTTIReflector;
 	var extendTypeDescription:org.swiftsuspenders.typedescriptions.TypeDescription;
 	
 	public function new()
 	{
-		
+		whitelist.set("flash.events.EventDispatcher", true);
+		whitelist.set("msignal.Signal0", true);
 	}
 	
 	public function getClass(value:Dynamic):Class<Dynamic>
@@ -156,7 +158,7 @@ class DescribeTypeRTTIReflector implements Reflector
 		
 		rtti = untyped type.__rtti;
 		if (rtti == null) {
-			if (!isInterface(type)) {
+			if (!isInterface(type) && !inWhitelist(type)) {
 				trace("Warning: " + CallProxy.getClassName(type) + " missing @:rtti matadata");
 			}
 		}
@@ -194,7 +196,12 @@ class DescribeTypeRTTIReflector implements Reflector
 		return description;
 	}
 	
-	function isInterface(type:Class<Dynamic>):Bool
+	private function inWhitelist(type:Class<Dynamic>):Bool
+	{
+		return whitelist.exists(Type.getClassName(type));
+	}
+	
+	private function isInterface(type:Class<Dynamic>):Bool
 	{
 		// Hack to check if class is an interface by looking at its class name and seeing if it Starts with a (IU)ppercase
 		var classPath = CallProxy.replaceClassName(type);

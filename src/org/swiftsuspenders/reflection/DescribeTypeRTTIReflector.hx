@@ -34,15 +34,26 @@ class DescribeTypeRTTIReflector implements Reflector
 	private var constructorElem:Fast;
 	private var rtti:String;
 	private var extendPath:String;
-	private var whitelist = new Map<String, Bool>();
+	private static var whitelist = new Map<String, Bool>();
 	
 	private var extendDescribeTypeReflector:DescribeTypeRTTIReflector;
 	var extendTypeDescription:org.swiftsuspenders.typedescriptions.TypeDescription;
 	
 	public function new()
 	{
-		whitelist.set("flash.events.EventDispatcher", true);
-		whitelist.set("msignal.Signal0", true);
+		addToWhitelist("flash.events.EventDispatcher");
+		addToWhitelist("openfl.events.EventDispatcher");
+		addToWhitelist("msignal.Signal0");
+	}
+	
+	public static function addToWhitelist(value:String):Void
+	{
+		whitelist.set(value, true);
+	}
+	
+	public static function removeFromWhitelist(value:String):Void
+	{
+		whitelist.set(value, false);
 	}
 	
 	public function getClass(value:Dynamic):Class<Dynamic>

@@ -16,6 +16,7 @@ class CallProxy
 	public static function replaceClassName(c:Class<Dynamic>):String
 	{
 		var className = CallProxy.getClassName(c);
+		if (className == null) return className;
 		className = className.split("flash.").join("openfl.");
 		return className;
 	}

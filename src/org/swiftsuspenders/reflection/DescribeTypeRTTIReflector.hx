@@ -157,6 +157,8 @@ class DescribeTypeRTTIReflector implements Reflector
 	
 	public function describeInjections(_type:Class<Dynamic>):TypeDescription
 	{
+		if (_type == null) return null;
+		
 		if (extendDescribeTypeReflector == null) {
 			extendDescribeTypeReflector = new DescribeTypeRTTIReflector();
 		}
@@ -169,7 +171,10 @@ class DescribeTypeRTTIReflector implements Reflector
 		
 		rtti = untyped type.__rtti;
 		if (rtti == null) {
-			if (!isInterface(type) && !inWhitelist(type)) {
+			var _isInterface = isInterface(type);
+			var _inWhitelist = inWhitelist(type);
+			
+			if (!_isInterface && !_inWhitelist) {
 				trace("Warning: " + CallProxy.getClassName(type) + " missing @:rtti matadata");
 			}
 		}

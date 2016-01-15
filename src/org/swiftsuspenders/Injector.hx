@@ -256,7 +256,12 @@ class Injector extends EventDispatcher
 		return value;
 	}
 	
-	private static var _baseTypes:Array<String> = initBaseTypeMappingIds([Dynamic, Array, Class/*, Function*//*, Bool*/, Float, Int, String]);
+	#if js
+	private static var _baseTypes:Array<String> = initBaseTypeMappingIds([Array, Class]);
+	#else
+	private static var _baseTypes:Array<String> = initBaseTypeMappingIds([Dynamic, Array, Class, Float, Int, String]);
+	#end
+	
 
  	private static function initBaseTypeMappingIds(types:Array<Dynamic>):Array<String>
 	{

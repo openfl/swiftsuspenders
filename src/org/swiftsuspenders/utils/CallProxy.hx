@@ -18,6 +18,7 @@ class CallProxy
 		var className = CallProxy.getClassName(c);
 		if (className == null) return className;
 		className = className.split("flash.").join("openfl.");
+		className = className.split("openfl._legacy.").join("openfl.");
 		return className;
 	}
 	

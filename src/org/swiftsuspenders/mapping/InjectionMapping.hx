@@ -152,15 +152,13 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 */
 	public function toProvider(provider:DependencyProvider):UnsealedMapping
 	{
-		// CHECK
-		//_sealed && throwSealedError();
 		if (_sealed) throwSealedError();
 		if (hasProvider() && provider != null && !_defaultProviderSet)
 		{
-			trace('Warning: Injector already has a mapping for ' + _mappingId + '.\n ' +
+			/*trace('Warning: Injector already has a mapping for ' + _mappingId + '.\n ' +
 				'If you have overridden this mapping intentionally you can use ' +
 				'"injector.unmap()" prior to your replacement mapping in order to ' +
-				'avoid seeing this message.');
+				'avoid seeing this message.');*/
 			_creatingInjector.hasEventListener(MappingEvent.MAPPING_OVERRIDE)
 			&& _creatingInjector.dispatchEvent(
 				new MappingEvent(MappingEvent.MAPPING_OVERRIDE, _type, _name, this));

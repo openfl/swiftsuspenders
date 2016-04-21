@@ -45,7 +45,6 @@ class SingletonProvider implements DependencyProvider
 		if (_response == null) {
 			_response = createResponse(_creatingInjector);
 		}
-		//_response = _response || createResponse(_creatingInjector);
 		return _response;
 	}
 

@@ -310,7 +310,7 @@ class Injector extends EventDispatcher
 	public function map(type:Class<Dynamic>, name:String = ''):InjectionMapping
 	{
 		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
-		if (_mappings[mappingId] != null) return _mappings[mappingId];
+		if (_mappings.exists(mappingId)) return _mappings.get(mappingId);
 		return createMapping(type, name, mappingId);
 	}
 
@@ -330,7 +330,7 @@ class Injector extends EventDispatcher
 	public function unmap(type:Class<Dynamic>, name:String = ''):Void
 	{
 		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
-		var mapping:InjectionMapping = _mappings[mappingId];
+		var mapping:InjectionMapping = _mappings.get(mappingId);
 		if (mapping != null && mapping.isSealed)
 		{
 			throw new InjectorError('Can\'t unmap a sealed mapping');
@@ -400,7 +400,7 @@ class Injector extends EventDispatcher
 	public function getMapping(type:Class<Dynamic>, name:String = ''):InjectionMapping
 	{
 		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
-		var mapping:InjectionMapping = _mappings[mappingId];
+		var mapping:InjectionMapping = _mappings.get(mappingId);
 		if (mapping == null)
 		{
 			throw new InjectorMissingMappingError('Error while retrieving an injector mapping: '
@@ -419,7 +419,7 @@ class Injector extends EventDispatcher
 	 */
 	public function hasManagedInstance(instance:Dynamic):Bool
 	{
-		return _managedObjects[UID.instanceID(instance)];
+		return _managedObjects.exists(UID.instanceID(instance));
 	}
 
 	/**
@@ -505,13 +505,11 @@ class Injector extends EventDispatcher
 	 */
 	public function getOrCreateNewInstance(type:Class<Dynamic>) :Dynamic
 	{
-		// CHECK
 		var _satisfies = satisfies(type);
 		if (_satisfies) return getInstance(type);
-		else return instantiateUnmapped(type);
-		
-		
-		//return satisfies(type) && getInstance(type) || instantiateUnmapped(type);
+		else {
+			return instantiateUnmapped(type);
+		}
 	}
 
 	/**
@@ -530,13 +528,15 @@ class Injector extends EventDispatcher
 			throw new InjectorInterfaceConstructionError(
 				"Can't instantiate interface " + CallProxy.replaceClassName(type));
 		}
+		
+		
+		
 		var description:TypeDescription = _classDescriptor.getDescription(type);
 		var instance :Dynamic = description.ctor.createInstance(type, this);
 		if (hasEventListener(InjectionEvent.POST_INSTANTIATE)) {
 			dispatchEvent(new InjectionEvent(InjectionEvent.POST_INSTANTIATE, instance, type));
 		}
 		applyInjectionPoints(instance, type, description);
-		
 		return instance;
 	}
 
@@ -549,7 +549,7 @@ class Injector extends EventDispatcher
 	 */
 	public function destroyInstance(instance:Dynamic):Void
 	{
-		_managedObjects[UID.clearInstanceID(instance)] = null;
+		_managedObjects.remove(UID.clearInstanceID(instance));
 		var type:Class<Dynamic> = _reflector.getClass(instance);
 		var typeDescription:TypeDescription = getTypeDescription(type);
 		// FIX
@@ -656,7 +656,7 @@ class Injector extends EventDispatcher
 	
 	public function hasDirectMapping(type:Class<Dynamic>, name:String = ''):Bool
 	{
-		return _mappings[CallProxy.replaceClassName(type) + '|' + name] != null;
+		return _mappings.exists(CallProxy.replaceClassName(type) + '|' + name);
 	}
 
 	
@@ -738,18 +738,18 @@ class Injector extends EventDispatcher
 	//----------------------         Private / Protected Methods        ----------------------//
 	private function createMapping(type:Class<Dynamic>, name: String, mappingId:String):InjectionMapping
 	{
-		if (_mappingsInProcess[mappingId])
+		if (_mappingsInProcess.get(mappingId))
 		{
 			throw new InjectorError(
 				'Can\'t change a mapping from inside a listener to it\'s creation event');
 		}
-		_mappingsInProcess[mappingId] = true;
+		_mappingsInProcess.set(mappingId, true);
 		
 		hasEventListener(MappingEvent.PRE_MAPPING_CREATE) && dispatchEvent(
 			new MappingEvent(MappingEvent.PRE_MAPPING_CREATE, type, name, null));
 
 		var mapping:InjectionMapping = new InjectionMapping(this, type, name, mappingId);
-		_mappings[mappingId] = mapping;
+		_mappings.set(mappingId, mapping);
 
 		var sealKey:Dynamic = mapping.seal();
 		hasEventListener(MappingEvent.POST_MAPPING_CREATE) && dispatchEvent(new MappingEvent(MappingEvent.POST_MAPPING_CREATE, type, name, mapping));
@@ -771,9 +771,8 @@ class Injector extends EventDispatcher
 		}
 		if (description.preDestroyMethods != null)
 		{
-			_managedObjects[UID.instanceID(target)] = target;
+			_managedObjects.set(UID.instanceID(target), target);
 		}
-		
 		hasEventListener(InjectionEvent.POST_CONSTRUCT) && dispatchEvent(new InjectionEvent(InjectionEvent.POST_CONSTRUCT, target, targetType));
 	}
 }

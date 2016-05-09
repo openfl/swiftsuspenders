@@ -6,6 +6,7 @@
 //------------------------------------------------------------------------------
 
 package org.swiftsuspenders.utils;
+import haxe.ds.ObjectMap;
 import openfl.errors.Error;
 
 
@@ -69,11 +70,17 @@ class UID
 	
 	// Be careful here (you are storing references to objects)
 	//private static var refs = new Array<Dynamic>();
-	private static var classRefs = new Map<String,Array<Dynamic>>();
+	//private static var classRefs = new Map<String,Array<Dynamic>>();
+	private static var classRefs = new ObjectMap<Dynamic,String>();
+	private static var count:Int = 0;
 	
 	public static function instanceID(source:Dynamic):String
 	{
-		var classID = classID(source);
+		if (!classRefs.exists(source)) {
+			classRefs.set(source, "id"+ (count++));
+		}
+		return classRefs.get(source);
+		/*var classID = classID(source);
 		if (Std.is(source, Class)) {
 			// Instance can not be of type Class
 			return classID;
@@ -93,12 +100,21 @@ class UID
 			id = classRefs[classID].length;
 			classRefs[classID].push(source);
 		}
-		return UID.classID(source) + "-" + id;
+		return UID.classID(source) + "-" + id;*/
 	}
 	
 	public static function clearInstanceID(source:Dynamic):String
 	{
-		// Warning, the next time instanceID is called, a new ID will be assigned!
+		var id:String = classRefs.get(source);
+		if (id != null) {
+			classRefs.remove(source);
+			return id;
+		}
+
+		//throw new Error("instanceID: " + source + " is not in use");
+		return "";
+		
+		/*// Warning, the next time instanceID is called, a new ID will be assigned!
 		var classID = classID(source);
 		if (Std.is(source, Class)) {
 			// Instance can not be of type Class
@@ -116,6 +132,6 @@ class UID
 			}
 		}
 		throw new Error("instanceID: " + source + " is not in use");
-		return "";
+		return "";*/
 	}
 }

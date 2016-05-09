@@ -15,16 +15,16 @@ class CallProxy
 	
 	public static function replaceClassName(c:Class<Dynamic>):String
 	{
-		var className = CallProxy.getClassName(c);
+		return Type.getClassName(c);
+		/*var className = CallProxy.getClassName(c);
 		if (className == null) return className;
 		className = className.split("flash.").join("openfl.");
-		return className;
+		return className;*/
 	}
 	
 	public static function getClassName(c:Class<Dynamic>):String
 	{
-		var className = Type.getClassName(c);
-		return className;
+		return Type.getClassName(c);
 	}
 	
 	public static function hasField( o:Dynamic, field:String):Bool

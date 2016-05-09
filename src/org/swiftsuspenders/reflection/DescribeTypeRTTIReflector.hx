@@ -337,25 +337,17 @@ class DescribeTypeRTTIReflector implements Reflector
 				}
 			}
 			
-			//var mappingId:String = CallProxy.replaceClassName(type) + '|';// + node.arg.(@key == 'name').attribute('value');
-			
 			var mappingId:String = "";
 			for (elem in _currentFactoryXMLFast.elements) {
 				if (elem.name == propertyName) {
 					// FIX missing key 
 					var pathFast = new Fast(elem.x.firstElement());
-					if (pathFast.has.path) mappingId = pathFast.att.path + '|';// + node.arg.(@key == 'name').attribute('value');
+					if (pathFast.has.path) {
+						mappingId = pathFast.att.path;
+						mappingId += '|';// + node.arg.(@key == 'name').attribute('value');
+					}
 				}
 			}
-			
-			/*<init public="1" set="method" line="54">
-				<f a=""><x path="Void"/></f>
-				<meta><m n="PostConstruct"/></meta>
-			</init>
-			*/
-			/*<init public="1" set="method" line="54">
-				<f a=""><x path="Void"/></f>
-			</init>*/
 			
 			//var optional = Reflect.getProperty(injectParams, "optional");
 			

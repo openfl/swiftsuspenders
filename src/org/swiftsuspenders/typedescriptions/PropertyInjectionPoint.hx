@@ -43,6 +43,6 @@ class PropertyInjectionPoint extends InjectionPoint
 			}
 			throw(new InjectorMissingMappingError('Injector is missing a mapping to handle injection into property "' + _propertyName + '" of object "' + target + '" with type "' +CallProxy.replaceClassName(targetType) +'". Target dependency: "' + _mappingId + '"'));
 		}
-		untyped target[_propertyName] = provider.apply(targetType, injector, injectParameters);
+		Reflect.setProperty(target, _propertyName, provider.apply(targetType, injector, injectParameters));
 	}
 }

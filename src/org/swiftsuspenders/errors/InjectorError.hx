@@ -7,13 +7,19 @@
 
 package org.swiftsuspenders.errors;
 
+#if openfl
 import openfl.errors.Error;
+#end
 
 @:keepSub
-class InjectorError extends Error
+class InjectorError #if openfl extends Error #end
 {
 	public function new(message:Dynamic="", id:Dynamic=0)
 	{
-		super(message, id);
+		#if openfl
+			super(message, id);
+		#else
+			trace(["Error: ", message, id]);
+		#end
 	}
 }

@@ -11,7 +11,6 @@ package org.swiftsuspenders.reflection;
 //import flash.utils.describeType;
 import haxe.rtti.Meta;
 import haxe.xml.Fast;
-import openfl.errors.Error;
 import org.swiftsuspenders.utils.CallProxy;
 
 import org.swiftsuspenders.errors.InjectorError;

@@ -76,6 +76,8 @@ class DescribeTypeRTTIReflector implements Reflector
 		
 		#if cpp
 			return Type.getClass(value);
+		#elseif js
+			return value.__class__;
 		#else
 			return value.constructor;
 		#end
@@ -345,6 +347,7 @@ class DescribeTypeRTTIReflector implements Reflector
 						mappingId = pathFast.att.path;
 						mappingId += '|';// + node.arg.(@key == 'name').attribute('value');
 					}
+					break;
 				}
 			}
 			

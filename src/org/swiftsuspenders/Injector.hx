@@ -438,7 +438,7 @@ class Injector extends EventDispatcher
 		var type:Class<Dynamic> = Type.getClass(target);
 		#else
 		var type:Class<Dynamic> = _reflector.getClass(target);
-		#end		
+		#end
 		
 		applyInjectionPoints(target, type, _classDescriptor.getDescription(type));
 	}

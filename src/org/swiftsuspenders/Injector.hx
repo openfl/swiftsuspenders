@@ -434,7 +434,12 @@ class Injector extends EventDispatcher
 	 */
 	public function injectInto(target:Dynamic):Void
 	{
+		#if (haxe_ver >= 3.40)
 		var type:Class<Dynamic> = Type.getClass(target);
+		#else
+		var type:Class<Dynamic> = _reflector.getClass(target);
+		#end		
+		
 		applyInjectionPoints(target, type, _classDescriptor.getDescription(type));
 	}
 
@@ -550,7 +555,13 @@ class Injector extends EventDispatcher
 	public function destroyInstance(instance:Dynamic):Void
 	{
 		_managedObjects.remove(UID.clearInstanceID(instance));
+		
+		#if (haxe_ver >= 3.40)
 		var type:Class<Dynamic> = Type.getClass(instance);
+		#else
+		var type:Class<Dynamic> = _reflector.getClass(instance);
+		#end		
+
 		var typeDescription:TypeDescription = getTypeDescription(type);
 		// FIX
 		/*for (var preDestroyHook:PreDestroyInjectionPoint = typeDescription.preDestroyMethods; preDestroyHook; preDestroyHook = PreDestroyInjectionPoint(preDestroyHook.next))

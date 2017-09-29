@@ -41,6 +41,15 @@ class PropertyInjectionPoint extends InjectionPoint
 			{
 				return;
 			}
+			
+			var targetStr:String;
+			#if js
+				targetStr = Type.getClassName(Type.getClass(target)); // Calling toString in JS can go recursive
+			#else
+				targetStr = Std.string(target);
+			#end
+			
+			
 			throw(new InjectorMissingMappingError('Injector is missing a mapping to handle injection into property "' + _propertyName + '" of object "' + target + '" with type "' +CallProxy.replaceClassName(targetType) +'". Target dependency: "' + _mappingId + '"'));
 		}
 		Reflect.setProperty(target, _propertyName, provider.apply(targetType, injector, injectParameters));

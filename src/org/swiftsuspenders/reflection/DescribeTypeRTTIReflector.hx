@@ -103,7 +103,7 @@ class DescribeTypeRTTIReflector implements Reflector
 		}
 		else
 		{
-			fqcn = CallProxy.replaceClassName(value);
+			fqcn = Type.getClassName(value);
 		}
 		
 		if (replaceColons == true) {
@@ -176,7 +176,7 @@ class DescribeTypeRTTIReflector implements Reflector
 			var _inWhitelist = inWhitelist(type);
 			
 			if (!_isInterface && !_inWhitelist) {
-				//trace("Warning: " + CallProxy.getClassName(type) + " missing @:rtti matadata");
+				//trace("Warning: " + Type.getClassName((type) + " missing @:rtti matadata");
 			}
 		}
 		
@@ -221,7 +221,7 @@ class DescribeTypeRTTIReflector implements Reflector
 	private function isInterface(type:Class<Dynamic>):Bool
 	{
 		// Hack to check if class is an interface by looking at its class name and seeing if it Starts with a (IU)ppercase
-		var classPath = CallProxy.replaceClassName(type);
+		var classPath = Type.getClassName(type);
 		var split = classPath.split(".");
 		var className:String = split[split.length - 1];
 		if (className.length <= 1) {
@@ -247,7 +247,7 @@ class DescribeTypeRTTIReflector implements Reflector
 			return;
 		}
 		
-		var className = CallProxy.getClassName(type);
+		var className = Type.getClassName(type);
 		
 		// CHECK add injectParameters
 		var injectParameters:Map<String,Dynamic> = null;
@@ -301,79 +301,63 @@ class DescribeTypeRTTIReflector implements Reflector
 	
 	private function addFieldInjectionPoints(description:TypeDescription, type:Class<Dynamic>):Void
 	{
-		// CHECK
 		var metaFields = Meta.getFields(type);
-		var fields = Reflect.fields(metaFields);
-		var injectFields:Array<String> = [];
-		
-		
-		
-		for (value in fields)
-		{
-			
-			var metaFields1 = Reflect.getProperty(metaFields, value);
-			var fields1 = Reflect.fields(metaFields1);
-			if (fields1[0] == 'inject') {
-				injectFields.push(value);
-			}
-			
-			
-		}
+		var fields:Array<String> = Reflect.fields(metaFields);
 		
 		if (extendTypeDescription != null) {
 			description.injectionPoints = extendTypeDescription.injectionPoints;
 		}
 		
-		for (propertyName in injectFields) {
-			var optional = false;
-			var injectParams:Array<String> = Reflect.getProperty(Reflect.getProperty(metaFields, propertyName), "inject");
-			if (injectParams != null){
-				for (i in 0...injectParams.length) 
-				{
-					if (injectParams[i].indexOf("optional=") != -1) {
-						if (injectParams[i].split("optional=")[1].toLowerCase() == 'true') {
-							optional = true;
-						}
-					}
-				}
-			}
-			
-			var mappingId:String = "";
-			for (elem in _currentFactoryXMLFast.elements) {
-				if (elem.name == propertyName) {
-					// FIX missing key 
-					var pathFast = new Fast(elem.x.firstElement());
-					if (pathFast.has.path) {
-						mappingId = pathFast.att.path;
-						mappingId += '|';// + node.arg.(@key == 'name').attribute('value');
-					}
-					break;
-				}
-			}
-			
-			//var optional = Reflect.getProperty(injectParams, "optional");
-			
-			// FIX missing injectParameters
-			//var injectParameters:Map<String,Dynamic> = extractNodeParameters(node.arg);
-			var injectParameters = new Map<String,Dynamic>();
-			
-			var injectionPoint:PropertyInjectionPoint = new PropertyInjectionPoint(mappingId, propertyName, optional, injectParameters);
-			description.addInjectionPoint(injectionPoint);
-			
-		}
-		
-		// FIX
-		/*for (var node:Xml in _currentFactoryXML.*.
-				(name() == 'variable' || name() == 'accessor').metadata.(@name == 'Inject'))
+		for (i in 0...fields.length)
 		{
-			var mappingId:String =
-					node.parent().@type + '|' + node.arg.(@key == 'name').attribute('value');
-			var propertyName:String = node.parent().@name;
-			var injectParameters:Map<Dynamic,Dynamic> = extractNodeParameters(node.arg);
-			var injectionPoint:PropertyInjectionPoint = new PropertyInjectionPoint(mappingId,
-				propertyName, injectParameters.optional == 'true', injectParameters);
-			description.addInjectionPoint(injectionPoint);
-		}*/
+			var propertyName:String = fields[i];
+			var metaFields1:Dynamic = untyped metaFields[propertyName];
+			var hasInject:Bool = Reflect.hasField(metaFields1, 'inject');
+			var injectName:String = "";
+			if (hasInject) {
+				
+				var optional = false;
+				var mappingId:String = "";
+				
+				var pair:String = null;
+				var key:String = null;
+				var value:String = null;
+				var injectObject:Array<String> = untyped metaFields1['inject'];
+				if (injectObject != null){
+					for (j in 0...injectObject.length) 
+					{
+						pair = injectObject[j];
+						key = value = null;
+						if (pair != null){
+							var split:Array<String> = pair.split("=");
+							key = split[0];
+							if (split.length > 1) value = split[1];
+						}
+						if (key == "optional") optional = value.toLowerCase() == "true";
+						if (key == "name") injectName = value;
+					}
+				}
+				
+				mappingId = getMappingId(propertyName) + "|" + injectName;
+				
+				
+				var injectParameters = new Map<String,Dynamic>();
+				description.addInjectionPoint(new PropertyInjectionPoint(mappingId, propertyName, optional, injectParameters));
+			}
+		}
+	}
+	
+	function getMappingId(propertyName:String) 
+	{
+		var value:String = "";
+		for (elem in _currentFactoryXMLFast.elements) {
+			if (elem.name == propertyName) {
+				var pathFast = new Fast(elem.x.firstElement());
+				if (pathFast.has.path) value = pathFast.att.path;
+				break;
+			}
+		}
+		return value;
 	}
 
 	private function addMethodInjectionPoints(description:TypeDescription, type:Class<Dynamic>):Void
@@ -467,7 +451,7 @@ class DescribeTypeRTTIReflector implements Reflector
 							
 							// FIX ORDER
 							//var injectionPoint = Type.createInstance(injectionPointType, [node.nodeName, parameters, requiredParameters, 0x3FFFFFFF]); // ORDER: isNaN(order) ? Limits.IntMax:order
-							var injectionPoint = CallProxy.createInstance(injectionPointType, [node.nodeName, parameters, requiredParameters, 0x3FFFFFFF]); // ORDER: isNaN(order) ? Limits.IntMax:order
+							var injectionPoint = Type.createInstance(injectionPointType, [node.nodeName, parameters, requiredParameters, 0x3FFFFFFF]); // ORDER: isNaN(order) ? Limits.IntMax:order
 							
 							injectionPoints.push(injectionPoint);
 						}

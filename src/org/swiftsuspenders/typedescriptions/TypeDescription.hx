@@ -50,7 +50,7 @@ class TypeDescription
 			throw new InjectorError('Can\'t add injection point after post construct method');
 		}
 		addInjectionPoint(new PropertyInjectionPoint(
-			CallProxy.replaceClassName(type) + '|' + injectionName, fieldName, optional, metadata));
+			Type.getClassName(type) + '|' + injectionName, fieldName, optional, metadata));
 		return this;
 	}
 
@@ -126,7 +126,7 @@ class TypeDescription
 		for (n in 0...parameterTypes.length)
 		{
 			var i = parameters.length - n;
-			parameters[i] = CallProxy.replaceClassName(parameterTypes[i]) + '|';
+			parameters[i] = Type.getClassName(parameterTypes[i]) + '|';
 			if (parameterNames[i]) parameters[i] += parameterNames[i];
 		}
 		return parameters;

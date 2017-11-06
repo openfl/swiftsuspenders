@@ -74,7 +74,7 @@ class MethodInjectionPoint extends InjectionPoint
 				var errorMsg:String = 'Injector is missing a mapping to handle injection into target "';
 				errorMsg += target;
 				errorMsg += '" of type "';
-				errorMsg += CallProxy.replaceClassName(targetType);
+				errorMsg += Type.getClassName(targetType);
 				errorMsg += '". Target dependency: ';
 				errorMsg += parameterMappingId;
 				errorMsg += ', method: ';

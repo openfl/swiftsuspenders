@@ -7,8 +7,15 @@
 
 package org.swiftsuspenders;
 
+/*#if flash
+	import org.swiftsuspenders.reflection.DescribeTypeJSONReflector;
+#else*/
+	import org.swiftsuspenders.reflection.DescribeTypeRTTIReflector;
+//#end
+
+import avmplus.DescribeTypeJSON;
 import openfl.errors.Error;
-import org.swiftsuspenders.reflection.DescribeTypeRTTIReflector;
+
 import org.swiftsuspenders.utils.CallProxy;
 import org.swiftsuspenders.utils.UID;
 
@@ -269,7 +276,7 @@ class Injector extends EventDispatcher
 		var returnArray = new Array<String>();
 		for (i in 0...types.length) 
 		{
-			returnArray.push(CallProxy.replaceClassName(types[i]) + '|');
+			returnArray.push(Type.getClassName(types[i]) + '|');
 		}
 		return returnArray;
 	}
@@ -284,7 +291,12 @@ class Injector extends EventDispatcher
 		_mappings = new Map<String,InjectionMapping>();
 		_mappingsInProcess = new Map<String,Bool>();
 		_managedObjects = new Map<String,Dynamic>();
-		_reflector = new DescribeTypeRTTIReflector();
+		/*#if flash
+			_reflector = new DescribeTypeJSONReflector();
+		#else*/
+			_reflector = new DescribeTypeRTTIReflector();
+		//#end
+		
 		_classDescriptor = new TypeDescriptor(_reflector, INJECTION_POINTS_CACHE);
 		this.applicationDomain = ApplicationDomain.currentDomain;
 		super();
@@ -309,7 +321,9 @@ class Injector extends EventDispatcher
 	 */
 	public function map(type:Class<Dynamic>, name:String = ''):InjectionMapping
 	{
-		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
+		//InjectorMacro.keep(type);
+		
+		var mappingId:String = Type.getClassName(type) + '|' + name;
 		if (_mappings.exists(mappingId)) return _mappings.get(mappingId);
 		return createMapping(type, name, mappingId);
 	}
@@ -329,7 +343,7 @@ class Injector extends EventDispatcher
 	 */
 	public function unmap(type:Class<Dynamic>, name:String = ''):Void
 	{
-		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
+		var mappingId:String = Type.getClassName(type) + '|' + name;
 		var mapping:InjectionMapping = _mappings.get(mappingId);
 		if (mapping != null && mapping.isSealed)
 		{
@@ -358,7 +372,7 @@ class Injector extends EventDispatcher
 	 */
 	public function satisfies(type:Class<Dynamic>, name:String = ''):Bool
 	{
-		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
+		var mappingId:String = Type.getClassName(type) + '|' + name;
 		return getProvider(mappingId, true) != null;
 	}
 
@@ -377,7 +391,7 @@ class Injector extends EventDispatcher
 	public function satisfiesDirectly(type:Class<Dynamic>, name:String = ''):Bool
 	{
 		return hasDirectMapping(type, name)
-			|| getDefaultProvider(CallProxy.replaceClassName(type) + '|' + name, false) != null;
+			|| getDefaultProvider(Type.getClassName(type) + '|' + name, false) != null;
 	}
 
 	/**
@@ -399,7 +413,7 @@ class Injector extends EventDispatcher
 	 */
 	public function getMapping(type:Class<Dynamic>, name:String = ''):InjectionMapping
 	{
-		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
+		var mappingId:String = Type.getClassName(type) + '|' + name;
 		var mapping:InjectionMapping = _mappings.get(mappingId);
 		if (mapping == null)
 		{
@@ -462,7 +476,7 @@ class Injector extends EventDispatcher
 	 */
 	public function getInstance(type:Class<Dynamic>, name:String = '', targetType:Class<Dynamic> = null) :Dynamic
 	{
-		var mappingId:String = CallProxy.replaceClassName(type) + '|' + name;
+		var mappingId:String = Type.getClassName(type) + '|' + name;
 		var provider:DependencyProvider;
 		if (getProvider(mappingId) != null) {
 			provider = getProvider(mappingId);
@@ -531,7 +545,7 @@ class Injector extends EventDispatcher
 		if(!canBeInstantiated(type))
 		{
 			throw new InjectorInterfaceConstructionError(
-				"Can't instantiate interface " + CallProxy.replaceClassName(type));
+				"Can't instantiate interface " + Type.getClassName(type));
 		}
 		
 		
@@ -662,12 +676,12 @@ class Injector extends EventDispatcher
 	
 	public function hasMapping(type:Class<Dynamic>, name:String = ''):Bool
 	{
-		return getProvider(CallProxy.replaceClassName(type) + '|' + name) != null;
+		return getProvider(Type.getClassName(type) + '|' + name) != null;
 	}
 	
 	public function hasDirectMapping(type:Class<Dynamic>, name:String = ''):Bool
 	{
-		return _mappings.exists(CallProxy.replaceClassName(type) + '|' + name);
+		return _mappings.exists(Type.getClassName(type) + '|' + name);
 	}
 
 	

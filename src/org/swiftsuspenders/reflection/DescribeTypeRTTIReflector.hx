@@ -311,7 +311,12 @@ class DescribeTypeRTTIReflector implements Reflector
 		for (i in 0...fields.length)
 		{
 			var propertyName:String = fields[i];
-			var metaFields1:Dynamic = untyped metaFields[propertyName];
+			#if cpp
+				var metaFields1:Dynamic = Reflect.getProperty(metaFields, propertyName);
+			#else
+				var metaFields1:Dynamic = untyped metaFields[propertyName];
+			#end
+			
 			var hasInject:Bool = Reflect.hasField(metaFields1, 'inject');
 			var injectName:String = "";
 			if (hasInject) {
@@ -322,7 +327,12 @@ class DescribeTypeRTTIReflector implements Reflector
 				var pair:String = null;
 				var key:String = null;
 				var value:String = null;
-				var injectObject:Array<String> = untyped metaFields1['inject'];
+				
+				#if cpp
+					var injectObject:Array<String> = Reflect.getProperty(metaFields1, 'inject');
+				#else
+					var injectObject:Array<String> = untyped metaFields1['inject'];
+				#end
 				if (injectObject != null){
 					for (j in 0...injectObject.length) 
 					{

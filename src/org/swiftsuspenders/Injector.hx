@@ -7,13 +7,7 @@
 
 package org.swiftsuspenders;
 
-/*#if flash
-	import org.swiftsuspenders.reflection.DescribeTypeJSONReflector;
-#else*/
-	import org.swiftsuspenders.reflection.DescribeTypeRTTIReflector;
-//#end
-
-import avmplus.DescribeTypeJSON;
+import org.swiftsuspenders.reflection.DescribeTypeRTTIReflector;
 import openfl.errors.Error;
 
 import org.swiftsuspenders.utils.CallProxy;

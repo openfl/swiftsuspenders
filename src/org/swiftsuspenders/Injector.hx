@@ -285,11 +285,7 @@ class Injector extends EventDispatcher
 		_mappings = new Map<String,InjectionMapping>();
 		_mappingsInProcess = new Map<String,Bool>();
 		_managedObjects = new Map<String,Dynamic>();
-		/*#if flash
-			_reflector = new DescribeTypeJSONReflector();
-		#else*/
-			_reflector = new DescribeTypeRTTIReflector();
-		//#end
+		_reflector = new DescribeTypeRTTIReflector();
 		
 		_classDescriptor = new TypeDescriptor(_reflector, INJECTION_POINTS_CACHE);
 		this.applicationDomain = ApplicationDomain.currentDomain;

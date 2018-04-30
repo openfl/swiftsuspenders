@@ -252,7 +252,7 @@ class ReflectorMacro
 								
 							case FieldType.FVar(t, e) | FieldType.FProp(_, _, t, e):
 							
-								var typename = t==null ? null : ComplexTypeTools.toString(t);
+								var typename = t==null ? null : cleanInjectType(ComplexTypeTools.toString(t));
 								var typepath:Expr;
 								if (typename == null){
 									typepath = macro null;
@@ -279,13 +279,18 @@ class ReflectorMacro
 			if (arg.opt || arg.value != null){
 				required--;
 			}
-			var paramtype = ComplexTypeTools.toString(arg.type);
-			if (paramtype.indexOf("Array<") == 0 || paramtype.indexOf("Map<") == 0){
-				paramtype = "Dynamic";
-			}
+			var paramtype = cleanInjectType(ComplexTypeTools.toString(arg.type));
 			parameterTypes.push(MacroStringTools.toFieldExpr(paramtype.split(".")));
 		}
 		return { parameterTypes:parameterTypes, required:required };
+	}
+	
+	static private function cleanInjectType(typename:String) : String
+	{
+		if (typename.indexOf("<") != -1){
+			typename = typename.substr(0, typename.indexOf("<"));
+		}
+		return typename;
 	}
 	
 #end

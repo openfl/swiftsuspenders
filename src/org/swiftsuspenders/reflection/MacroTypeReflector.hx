@@ -25,7 +25,7 @@ class MacroTypeReflector implements Reflector
 				return fallbackReflector.describeInjections(type);
 			}else{
 				throw "Couldn't find type description on class: " + Type.getClassName(type)
-					+ "\n\tMake sure metadata is added: @:build(org.swiftsuspenders.macros.ReflectorMacro.check())";
+					+ "\n\tMake sure class implements DescribedType";
 			}
 		}else{
 			return typeDesc;

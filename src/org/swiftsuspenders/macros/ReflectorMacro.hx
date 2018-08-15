@@ -61,21 +61,20 @@ class ReflectorMacro
 	
 #if macro
 
+	static var doneClasses:Array<String> = [];
+
 	static function checkType() : Array<Field>
 	{
+		var classType:ClassType = Context.getLocalClass().get();
+		var fields = Context.getBuildFields();
 		var typename = Context.getLocalClass().toString();
 		
-		var fields = Context.getBuildFields();
+		if (doneClasses.indexOf(typename) !=-1) return fields; // Already processed class
+		doneClasses.push(typename);
+		
 		var typeDescExpr:Array<Expr> = [];
 		var constDescExpr:Array<Expr> = [];
 		var firstPos:Position = Context.currentPos();
-		
-		var classType:ClassType = null;
-        switch (Context.getLocalType()) {
-            case TInst(r, _):
-                classType = r.get();
-            case _:
-        }
 		
 		if (classType != null){
 			checkForSuperFields(classType, constDescExpr, typeDescExpr);

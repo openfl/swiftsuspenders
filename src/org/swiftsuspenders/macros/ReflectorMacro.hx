@@ -155,6 +155,8 @@ class ReflectorMacro
 			}
 			
 			if (field.name == "new"){
+				if (hasIgnoreMeta(metalist)) continue;
+
 				if (functionInfo == null){
 					switch(field.kind){
 						case FieldType.FFun(f):
@@ -268,6 +270,14 @@ class ReflectorMacro
 		}
 		
 		return initFunction;
+	}
+
+	static private function hasIgnoreMeta(metalist:Metadata):Bool
+	{
+		for (meta in metalist) {
+			if (meta.name == "ignore") return true;
+		}
+		return false;
 	}
 	
 	static private function getFunctionInfo(func:Function) : FunctionInfo

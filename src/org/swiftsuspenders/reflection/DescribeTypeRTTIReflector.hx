@@ -348,7 +348,7 @@ class DescribeTypeRTTIReflector implements Reflector
 					}
 				}
 				
-				mappingId = getMappingId(propertyName) + "|" + injectName;
+				mappingId = getMappingId(propertyName, type) + "|" + injectName;
 				
 				
 				var injectParameters = new Map<String,Dynamic>();
@@ -357,8 +357,12 @@ class DescribeTypeRTTIReflector implements Reflector
 		}
 	}
 	
-	function getMappingId(propertyName:String) 
+	function getMappingId(propertyName:String, type:Class<Dynamic>) 
 	{
+		if (_currentFactoryXMLFast == null) {
+			trace("No rtti for " + Type.getClassName(type));
+			return propertyName;
+		}
 		var value:String = "";
 		for (elem in _currentFactoryXMLFast.elements) {
 			if (elem.name == propertyName) {

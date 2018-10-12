@@ -68,10 +68,15 @@ class ReflectorMacro
 		var classType:ClassType = Context.getLocalClass().get();
 		var fields = Context.getBuildFields();
 		var typename = Context.getLocalClass().toString();
-		
-		if (doneClasses.indexOf(typename) !=-1) return fields; // Already processed class
+		var alreadyAdded:Bool = false;
+		if (doneClasses.indexOf(typename) !=-1) {
+			for (field in fields){
+				if (field.name == "__TYPE_DESC"){
+					alreadyAdded = true;
+				}
+			}
+		}
 		doneClasses.push(typename);
-		
 		var typeDescExpr:Array<Expr> = [];
 		var constDescExpr:Array<Expr> = [];
 		var firstPos:Position = Context.currentPos();
@@ -86,6 +91,7 @@ class ReflectorMacro
 		
 		var ex = macro __TYPE_DESC = new org.swiftsuspenders.typedescriptions.TypeDescription($v{noConstructor});
 		typeDescExpr.unshift(ex);
+		
 		
 		if (!noConstructor){
 			// Add the last constructor expression (as it is the last most sub-class's constructor)
@@ -109,7 +115,8 @@ class ReflectorMacro
 		}
 		
 		var descField:Field = { name:"__TYPE_DESC", kind:FieldType.FVar(ComplexType.TPath( { pack:["org", "swiftsuspenders", "typedescriptions"], name: "TypeDescription" } )), pos:firstPos, access:[Access.AStatic] };
-		fields.push(descField);
+		
+		if (!alreadyAdded) fields.push(descField);
 		
 		return fields;
 	}

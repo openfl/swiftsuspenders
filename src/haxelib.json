@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [ "dependency-injection", "openfl","flash", "js", "web" ],
 	"description": "This is an OpenFL 2.x/Haxe port of the popular AS3 metadata driven IOC (Inversion Of Control) solution SwiftSuspenders",
-	"version": "1.0.3",
-	"releasenote": "minor tweaks",
+	"version": "1.0.4",
+	"releasenote": "fix macro compiler caching issue",
 	"contributors": [ "p.j.shand", "tbyrne" ],
 	"dependencies": {
 		

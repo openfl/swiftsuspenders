@@ -359,8 +359,9 @@ class DescribeTypeRTTIReflector implements Reflector
 	
 	function getMappingId(propertyName:String, type:Class<Dynamic>) 
 	{
+		//import org.swiftsuspenders.utils.DescribedType;
 		if (_currentFactoryXMLFast == null) {
-			trace("No rtti for " + Type.getClassName(type));
+			trace("metadata missing for " + Type.getClassName(type) + "\nClasses with injectables must implement DescribedType");
 			return propertyName;
 		}
 		var value:String = "";

@@ -299,7 +299,7 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 * @return <code>true</code> if the mapping is sealed, <code>false</code> if not
 	 */
 	
-	public var isSealed(get_isSealed, null):Bool;
+	public var isSealed(get, null):Bool;
 	
 	public function get_isSealed():Bool
 	{

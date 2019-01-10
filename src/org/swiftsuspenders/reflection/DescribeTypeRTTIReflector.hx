@@ -7,10 +7,8 @@
 
 package org.swiftsuspenders.reflection;
 
-
-//import flash.utils.describeType;
 import haxe.rtti.Meta;
-import haxe.xml.Fast;
+import haxe.xml.Access;
 import org.swiftsuspenders.utils.CallProxy;
 
 import org.swiftsuspenders.errors.InjectorError;
@@ -29,8 +27,8 @@ class DescribeTypeRTTIReflector implements Reflector
 {
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _currentFactoryXML:Xml;
-	private var _currentFactoryXMLFast:Fast;
-	private var constructorElem:Fast;
+	private var _currentFactoryXMLFast:Access;
+	private var constructorElem:Access;
 	private var rtti:String;
 	private var extendPath:String;
 	private static var whitelist = new Map<String, Bool>();
@@ -183,7 +181,7 @@ class DescribeTypeRTTIReflector implements Reflector
 		if (rtti != null) {
 			
 			_currentFactoryXML = Xml.parse(rtti).firstElement();
-			_currentFactoryXMLFast = new Fast(_currentFactoryXML);
+			_currentFactoryXMLFast = new Access(_currentFactoryXML);
 			
 			for (elem in _currentFactoryXMLFast.elements) {
 				if (elem.name == 'new') constructorElem = elem;
@@ -275,7 +273,7 @@ class DescribeTypeRTTIReflector implements Reflector
 		for (node in x.firstElement().iterator()) 
 		{
 			if(node.nodeType == Xml.Element ){
-				var nodeFast = new Fast(node);
+				var nodeFast = new Access(node);
 				parameters.push(nodeFast.att.path + "|");
 			}
 		}
@@ -367,7 +365,7 @@ class DescribeTypeRTTIReflector implements Reflector
 		var value:String = "";
 		for (elem in _currentFactoryXMLFast.elements) {
 			if (elem.name == propertyName) {
-				var pathFast = new Fast(elem.x.firstElement());
+				var pathFast = new Access(elem.x.firstElement());
 				if (pathFast.has.path) value = pathFast.att.path;
 				break;
 			}
@@ -448,7 +446,7 @@ class DescribeTypeRTTIReflector implements Reflector
 						
 						if (node.nodeName == value){
 							//trace("node = " + node);
-							var parameterNames:Array<String> = new Fast(node).node.f.att.a.split(":");
+							var parameterNames:Array<String> = new Access(node).node.f.att.a.split(":");
 							var requiredParameters:Int = 0;
 							for (i in 0...parameterNames.length) 
 							{
@@ -470,7 +468,7 @@ class DescribeTypeRTTIReflector implements Reflector
 							
 							injectionPoints.push(injectionPoint);
 						}
-						//var nodeFast = new Fast(node);
+						//var nodeFast = new Access(node);
 						//parameters.push(nodeFast.att.path + "|");
 						
 						

@@ -123,9 +123,8 @@ class TypeDescription
 	private function createParameterMappings(parameterTypes:Array<Dynamic>, parameterNames:Array<Dynamic>):Array<Dynamic>
 	{
 		var parameters = new Array<Dynamic>();
-		for (n in 0...parameterTypes.length)
+		for (i in 0...parameterTypes.length)
 		{
-			var i = parameters.length - n;
 			parameters[i] = Type.getClassName(parameterTypes[i]) + '|';
 			if (parameterNames[i]) parameters[i] += parameterNames[i];
 		}

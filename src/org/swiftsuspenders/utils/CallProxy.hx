@@ -34,7 +34,7 @@ class CallProxy
 			var f:Dynamic = Reflect.getProperty(o, field);
 			if (untyped __js__('"undefined" !== typeof f')) return true;
 			else return false;
-		#elseif (cpp)
+		#elseif (cpp||hl)
 			var f:Dynamic = Reflect.getProperty(o, field);
 			var isFunction = Reflect.isFunction(f);
 			var isObject = Reflect.isObject(f);

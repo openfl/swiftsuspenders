@@ -72,7 +72,7 @@ class DescribeTypeRTTIReflector implements Reflector
 			return Array;
 		}
 		
-		#if cpp
+		#if (cpp||hl)
 			return Type.getClass(value);
 		#elseif js
 			return value.__class__;
@@ -162,7 +162,7 @@ class DescribeTypeRTTIReflector implements Reflector
 			extendDescribeTypeReflector = new DescribeTypeRTTIReflector();
 		}
 		
-		#if cpp
+		#if (cpp||hl)
 			var type:Dynamic = _type;
 		#else 
 			var type:Class<Dynamic> = _type;
@@ -309,7 +309,7 @@ class DescribeTypeRTTIReflector implements Reflector
 		for (i in 0...fields.length)
 		{
 			var propertyName:String = fields[i];
-			#if cpp
+			#if (cpp||hl)
 				var metaFields1:Dynamic = Reflect.getProperty(metaFields, propertyName);
 			#else
 				var metaFields1:Dynamic = untyped metaFields[propertyName];
@@ -326,7 +326,7 @@ class DescribeTypeRTTIReflector implements Reflector
 				var key:String = null;
 				var value:String = null;
 				
-				#if cpp
+				#if (cpp||hl)
 					var injectObject:Array<String> = Reflect.getProperty(metaFields1, 'inject');
 				#else
 					var injectObject:Array<String> = untyped metaFields1['inject'];

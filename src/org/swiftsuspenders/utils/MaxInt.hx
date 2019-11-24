@@ -18,6 +18,8 @@ class MaxInt
 	static inline function get_INT_MAX():Int return untyped __java__('Integer.MAX_VALUE');
 	#elseif cpp
 	static inline function get_INT_MAX():Int return untyped __cpp__('INT_MAX');
+	#elseif hl
+	static inline function get_INT_MAX():Int return 2147483647;
 	#elseif python
 	static inline function get_INT_MAX():Int return PythonSysAdapter.maxint;
 	#elseif php

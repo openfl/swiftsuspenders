@@ -8,10 +8,8 @@
 package org.swiftsuspenders.errors;
 
 @:keepSub
-class InjectorMissingMappingError extends InjectorError
-{
-	public function new(message :Dynamic = "", id :Dynamic = 0)
-	{
+class InjectorMissingMappingError extends InjectorError {
+	public function new(message:Dynamic = "", id:Dynamic = 0) {
 		super(message, id);
 	}
 }

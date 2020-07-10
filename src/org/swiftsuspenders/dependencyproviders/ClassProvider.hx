@@ -10,15 +10,12 @@ package org.swiftsuspenders.dependencyproviders;
 import org.swiftsuspenders.Injector;
 
 @:keepSub
-class ClassProvider implements DependencyProvider
-{
+class ClassProvider implements DependencyProvider {
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _responseType:Class<Dynamic>;
 
-
 	//----------------------               Public Methods               ----------------------//
-	public function new(responseType:Class<Dynamic>)
-	{
+	public function new(responseType:Class<Dynamic>) {
 		_responseType = responseType;
 	}
 
@@ -28,12 +25,9 @@ class ClassProvider implements DependencyProvider
 	 * @return A new instance of the class given to the ClassProvider's constructor,
 	 * constructed using the <code>usingInjector</code>
 	 */
-	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic
-	{
+	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic, Dynamic>):Dynamic {
 		return activeInjector.instantiateUnmapped(_responseType);
 	}
 
-	public function destroy():Void
-	{
-	}
+	public function destroy():Void {}
 }

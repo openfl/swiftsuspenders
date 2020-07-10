@@ -8,10 +8,8 @@
 package org.swiftsuspenders.errors;
 
 @:keepSub
-class InjectorError
-{
-	public function new(message:Dynamic="", id:Dynamic=0)
-	{
+class InjectorError {
+	public function new(message:Dynamic = "", id:Dynamic = 0) {
 		trace(["Error: ", message, id]);
 	}
 }

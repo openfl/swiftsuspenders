@@ -19,8 +19,7 @@ import org.swiftsuspenders.dependencyproviders.ValueProvider;
 import org.swiftsuspenders.errors.InjectorError;
 
 @:keepSub
-class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
-{
+class InjectionMapping implements ProviderlessMapping implements UnsealedMapping {
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _type:Class<Dynamic>;
 	private var _name:String;
@@ -35,8 +34,7 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	private var _sealKey:Dynamic;
 
 	//----------------------               Public Methods               ----------------------//
-	public function new(creatingInjector:Injector, type:Class<Dynamic>, name:String, mappingId:String)
-	{
+	public function new(creatingInjector:Injector, type:Class<Dynamic>, name:String, mappingId:String) {
 		_creatingInjector = creatingInjector;
 		_type = type;
 		_name = name;
@@ -59,8 +57,7 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @see #toSingleton()
 	 */
-	public function asSingleton(initializeImmediately:Bool = false):UnsealedMapping
-	{
+	public function asSingleton(initializeImmediately:Bool = false):UnsealedMapping {
 		toSingleton(_type, initializeImmediately);
 		return this;
 	}
@@ -80,8 +77,7 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @see #toProvider()
 	 */
-	public function toType(type:Class<Dynamic>):UnsealedMapping
-	{
+	public function toType(type:Class<Dynamic>):UnsealedMapping {
 		toProvider(new ClassProvider(type));
 		return this;
 	}
@@ -103,8 +99,7 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @see #toProvider()
 	 */
-	public function toSingleton(type:Class<Dynamic>, initializeImmediately:Bool = false):UnsealedMapping
-	{
+	public function toSingleton(type:Class<Dynamic>, initializeImmediately:Bool = false):UnsealedMapping {
 		toProvider(new SingletonProvider(type, _creatingInjector));
 		if (initializeImmediately) {
 			_creatingInjector.getInstance(_type, _name);
@@ -130,11 +125,9 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 * @see Injector#injectInto()
 	 * @see Injector#destroyInstance()
 	 */
-	public function toValue(value:Dynamic, autoInject:Bool = false, destroyOnUnmap:Bool = false):UnsealedMapping
-	{
-		toProvider(new ValueProvider(value, destroyOnUnmap ? _creatingInjector:null));
-		if (autoInject)
-		{
+	public function toValue(value:Dynamic, autoInject:Bool = false, destroyOnUnmap:Bool = false):UnsealedMapping {
+		toProvider(new ValueProvider(value, destroyOnUnmap ? _creatingInjector : null));
+		if (autoInject) {
 			_creatingInjector.injectInto(value);
 		}
 		return this;
@@ -150,20 +143,17 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @throws org.swiftsuspenders.errors.InjectorError Sealed mappings can't be changed in any way
 	 */
-	public function toProvider(provider:DependencyProvider):UnsealedMapping
-	{
-		if (_sealed) throwSealedError();
-		if (hasProvider() && provider != null && !_defaultProviderSet)
-		{
+	public function toProvider(provider:DependencyProvider):UnsealedMapping {
+		if (_sealed)
+			throwSealedError();
+		if (hasProvider() && provider != null && !_defaultProviderSet) {
 			/*trace('Warning: Injector already has a mapping for ' + _mappingId + '.\n ' +
 				'If you have overridden this mapping intentionally you can use ' +
 				'"injector.unmap()" prior to your replacement mapping in order to ' +
-				'avoid seeing this message.');*/
-			_creatingInjector.hasEventListener(MappingEvent.MAPPING_OVERRIDE)
-			&& _creatingInjector.dispatchEvent(
-				new MappingEvent(MappingEvent.MAPPING_OVERRIDE, _type, _name, this));
-		}
-		dispatchPreChangeEvent();
+				'avoid seeing this message.'); */
+			_creatingInjector.hasEventListener(MappingEvent.MAPPING_OVERRIDE) && _creatingInjector.dispatchEvent(new MappingEvent(MappingEvent.MAPPING_OVERRIDE,
+				_type, _name, this));
+		} dispatchPreChangeEvent();
 		_defaultProviderSet = false;
 		mapProvider(provider);
 		dispatchPostChangeEvent();
@@ -183,7 +173,7 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 * @throws org.swiftsuspenders.errors.InjectorMissingMappingError when no mapping was found
 	 * for the specified dependency
 	 */
-	public function toProviderOf(type:Class<Dynamic>, name:String = ''):UnsealedMapping{
+	public function toProviderOf(type:Class<Dynamic>, name:String = ''):UnsealedMapping {
 		var provider:DependencyProvider = _creatingInjector.getMapping(type, name).getProvider();
 		toProvider(provider);
 		return this;
@@ -202,13 +192,12 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @throws org.swiftsuspenders.errors.InjectorError Sealed mappings can't be changed in any way
 	 */
-	public function softly():ProviderlessMapping
-	{
+	public function softly():ProviderlessMapping {
 		// CHECK
-		//_sealed && throwSealedError();
-		if (_sealed) throwSealedError();
-		if (!_soft)
-		{
+		// _sealed && throwSealedError();
+		if (_sealed)
+			throwSealedError();
+		if (!_soft) {
 			var provider:DependencyProvider = getProvider();
 			dispatchPreChangeEvent();
 			_soft = true;
@@ -225,13 +214,12 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @throws org.swiftsuspenders.errors.InjectorError Sealed mappings can't be changed in any way
 	 */
-	public function locally():ProviderlessMapping
-	{
+	public function locally():ProviderlessMapping {
 		// CHECK
-		//_sealed && throwSealedError();
-		if (_sealed) throwSealedError();
-		if (_local)
-		{
+		// _sealed && throwSealedError();
+		if (_sealed)
+			throwSealedError();
+		if (_local) {
 			return this;
 		}
 		var provider:DependencyProvider = getProvider();
@@ -256,10 +244,8 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @see #unseal()
 	 */
-	public function seal():Dynamic
-	{
-		if (_sealed)
-		{
+	public function seal():Dynamic {
+		if (_sealed) {
 			throw new InjectorError('Mapping is already sealed.');
 		}
 		_sealed = true;
@@ -280,14 +266,11 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @see #seal()
 	 */
-	public function unseal(key:Dynamic):InjectionMapping
-	{
-		if (!_sealed)
-		{
+	public function unseal(key:Dynamic):InjectionMapping {
+		if (!_sealed) {
 			throw new InjectorError('Can\'t unseal a non-sealed mapping.');
 		}
-		if (key != _sealKey)
-		{
+		if (key != _sealKey) {
 			throw new InjectorError('Can\'t unseal mapping without the correct key.');
 		}
 		_sealed = false;
@@ -298,31 +281,27 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	/**
 	 * @return <code>true</code> if the mapping is sealed, <code>false</code> if not
 	 */
-	
 	public var isSealed(get, null):Bool;
-	
-	public function get_isSealed():Bool
-	{
+
+	public function get_isSealed():Bool {
 		return _sealed;
 	}
 
 	/**
 	 * @return <code>true</code> if the mapping has a provider, <code>false</code> if not
 	 */
-	public function hasProvider():Bool
-	{
-		if (_creatingInjector.providerMappings[_mappingId] == null) return false;
+	public function hasProvider():Bool {
+		if (_creatingInjector.providerMappings[_mappingId] == null)
+			return false;
 		return true;
 	}
 
 	/**
 	 * @return The provider currently associated with the mapping
 	 */
-	public function getProvider():DependencyProvider
-	{
+	public function getProvider():DependencyProvider {
 		var provider:DependencyProvider = _creatingInjector.providerMappings[_mappingId];
-		while (Std.is(provider, ForwardingProvider))
-		{
+		while (Std.is(provider, ForwardingProvider)) {
 			provider = cast(provider, ForwardingProvider).provider;
 		}
 		return provider;
@@ -341,14 +320,13 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 *
 	 * @return The <code>InjectionMapping</code> the method is invoked on
 	 */
-	public function setInjector(injector:Injector):InjectionMapping
-	{
+	public function setInjector(injector:Injector):InjectionMapping {
 		// CHECK
-		//_sealed && throwSealedError();
-		if (_sealed) throwSealedError();
-		
-		if (injector == _overridingInjector)
-		{
+		// _sealed && throwSealedError();
+		if (_sealed)
+			throwSealedError();
+
+		if (injector == _overridingInjector) {
 			return this;
 		}
 		var provider:DependencyProvider = getProvider();
@@ -357,42 +335,32 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 		return this;
 	}
 
-
 	//----------------------         Private / Protected Methods        ----------------------//
-	private function mapProvider(provider:DependencyProvider):Void
-	{
-		if (_soft)
-		{
+	private function mapProvider(provider:DependencyProvider):Void {
+		if (_soft) {
 			provider = new SoftDependencyProvider(provider);
 		}
-		if (_local)
-		{
+		if (_local) {
 			provider = new LocalOnlyProvider(provider);
 		}
-		if (_overridingInjector != null)
-		{
+		if (_overridingInjector != null) {
 			provider = new InjectorUsingProvider(_overridingInjector, provider);
 		}
-		
+
 		_creatingInjector.providerMappings[_mappingId] = provider;
 	}
 
-	private function throwSealedError():Void
-	{
+	private function throwSealedError():Void {
 		throw new InjectorError('Can\'t change a sealed mapping');
 	}
 
-	private function dispatchPreChangeEvent():Void
-	{
-		_creatingInjector.hasEventListener(MappingEvent.PRE_MAPPING_CHANGE)
-			&& _creatingInjector.dispatchEvent(
-			new MappingEvent(MappingEvent.PRE_MAPPING_CHANGE, _type, _name, this));
-	}
+	private function dispatchPreChangeEvent():Void {
+		_creatingInjector.hasEventListener(MappingEvent.PRE_MAPPING_CHANGE) && _creatingInjector.dispatchEvent(new MappingEvent(MappingEvent.PRE_MAPPING_CHANGE,
+			_type, _name, this));
 
-	private function dispatchPostChangeEvent():Void
-	{
-		_creatingInjector.hasEventListener(MappingEvent.POST_MAPPING_CHANGE)
-			&& _creatingInjector.dispatchEvent(
-			new MappingEvent(MappingEvent.POST_MAPPING_CHANGE, _type, _name, this));
+	}
+	private function dispatchPostChangeEvent():Void {
+		_creatingInjector.hasEventListener(MappingEvent.POST_MAPPING_CHANGE) && _creatingInjector.dispatchEvent(new MappingEvent(MappingEvent.POST_MAPPING_CHANGE,
+			_type, _name, this));
 	}
 }

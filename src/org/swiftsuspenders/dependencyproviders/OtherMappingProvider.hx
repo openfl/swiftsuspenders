@@ -11,14 +11,12 @@ import org.swiftsuspenders.mapping.InjectionMapping;
 import org.swiftsuspenders.Injector;
 
 @:keepSub
-class OtherMappingProvider implements DependencyProvider
-{
+class OtherMappingProvider implements DependencyProvider {
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _mapping:InjectionMapping;
 
 	//----------------------               Public Methods               ----------------------//
-	public function new(mapping:InjectionMapping)
-	{
+	public function new(mapping:InjectionMapping) {
 		_mapping = mapping;
 	}
 
@@ -28,13 +26,9 @@ class OtherMappingProvider implements DependencyProvider
 	 * @return The result of invoking <code>apply</code> on the <code>InjectionMapping</code>
 	 * provided to this provider's constructor
 	 */
-	public function apply(
-		targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic
-	{
+	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic, Dynamic>):Dynamic {
 		return _mapping.getProvider().apply(targetType, activeInjector, injectParameters);
 	}
 
-	public function destroy():Void
-	{
-	}
+	public function destroy():Void {}
 }

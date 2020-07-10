@@ -8,8 +8,7 @@
 package org.swiftsuspenders.dependencyproviders;
 
 @:keepSub
-interface FallbackDependencyProvider extends DependencyProvider
-{
+interface FallbackDependencyProvider extends DependencyProvider {
 	/**
 	 * Instructs the fallback provider to interpret the next call to <code>apply</code> as
 	 * being a request for the given <code>mappingId</code>. The provider must return

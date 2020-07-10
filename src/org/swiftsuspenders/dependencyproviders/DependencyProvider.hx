@@ -10,8 +10,7 @@ package org.swiftsuspenders.dependencyproviders;
 import org.swiftsuspenders.Injector;
 
 @:keepSub
-interface DependencyProvider
-{
+interface DependencyProvider {
 	/**
 	 * Provides a response that, if required, is created using the appropriate given injector
 	 *
@@ -21,7 +20,7 @@ interface DependencyProvider
 	 * @param injectParameters Map<Dynamic,Dynamic> containing all parameters for the current injection point
 	 * @return The result of the specific DependencyProvider's mechanism
 	 */
-	function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic;
+	function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic, Dynamic>):Dynamic;
 
 	/**
 	 * Cleans up any internal state the provider might keep as preparation for the Injector

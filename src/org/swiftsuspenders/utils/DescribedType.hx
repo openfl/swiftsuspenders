@@ -6,8 +6,4 @@ package org.swiftsuspenders.utils;
  */
 @:keepSub
 @:autoBuild(org.swiftsuspenders.macros.ReflectorMacro.check())
-interface DescribedType 
-{
-
-	
-}
+interface DescribedType {}

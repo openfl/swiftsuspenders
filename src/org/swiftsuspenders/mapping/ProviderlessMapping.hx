@@ -10,8 +10,7 @@ package org.swiftsuspenders.mapping;
 import org.swiftsuspenders.dependencyproviders.DependencyProvider;
 
 @:keepSub
-interface ProviderlessMapping
-{
+interface ProviderlessMapping {
 	/**
 	 * @copy InjectionMapping#toType()
 	 */

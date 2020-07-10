@@ -10,15 +10,13 @@ package org.swiftsuspenders.dependencyproviders;
 import org.swiftsuspenders.Injector;
 
 @:keepSub
-class ValueProvider implements DependencyProvider
-{
+class ValueProvider implements DependencyProvider {
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _value:Dynamic;
 	private var _creatingInjector:Injector;
 
 	//----------------------               Public Methods               ----------------------//
-	public function new(value:Dynamic, creatingInjector:Injector = null)
-	{
+	public function new(value:Dynamic, creatingInjector:Injector = null) {
 		_value = value;
 		_creatingInjector = creatingInjector;
 	}
@@ -28,15 +26,12 @@ class ValueProvider implements DependencyProvider
 	 *
 	 * @return The value provided to this provider's constructor
 	 */
-	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic
-	{
+	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic, Dynamic>):Dynamic {
 		return _value;
 	}
 
-	public function destroy():Void
-	{
-		if (_value != null && _creatingInjector != null && _creatingInjector.hasManagedInstance(_value))
-		{
+	public function destroy():Void {
+		if (_value != null && _creatingInjector != null && _creatingInjector.hasManagedInstance(_value)) {
 			_creatingInjector.destroyInstance(_value);
 		}
 		_creatingInjector = null;

@@ -1,11 +1,10 @@
-# SwiftSuspenders
+# Haxe SwiftSuspenders
 
-Attention: This README is just a stub to prevent you from reading the heavily outdated [one for Swiftsuspenders 1.x](https://github.com/tschneidereit/SwiftSuspenders/blob/the-past/README.textile).
-
-That being said, here's a very quick outline of the new version's capabilities and API:
+This is a Haxe port of the AS3 popular dependencies injection library SwiftSuspenders. It's more or less a one for one translation with the added benefit of having a Macro (compile time) reflector, which drastically improves performance.
 
 ## Features
 
+- Macro reflector, just make sure than any class that using `@inject` implements `DescribedType`
 - injection requests configurable using standardized metadata
 - can inject into vars, setters, methods and constructors
 - injection requests can be optional
@@ -20,11 +19,11 @@ That being said, here's a very quick outline of the new version's capabilities a
 
 ### Requests
 
-Requests, aka injection points, can be defined using the metadata tag `[Inject]` atop the var, setter or method to inject into. For constructor injection, no metadata is required.
+Requests, aka injection points, can be defined using the metadata tag `@inject` atop the var, setter or method to inject into. For constructor injection, no metadata is required.
 
-Named injections can be defined using the syntax `[Inject(name="injection name")]`. In this case, constructors have to have their metadata placed atop the class itself, not the constructor. This is a limitation of the Flex compiler.
+Named injections can be defined using the syntax `@inject("name=injection name")`. In this case, constructors have to have their metadata placed atop the class itself, not the constructor. This is a limitation of the Flex compiler.
 
-Optional injection requests can be defined using the syntax `[Inject(optional=true)]`
+Optional injection requests can be defined using the syntax `@inject("optional=true")`
 
 ### Mappings
 

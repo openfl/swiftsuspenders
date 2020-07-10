@@ -8,11 +8,9 @@
 package org.swiftsuspenders.typedescriptions;
 
 @:keepSub
-class PostConstructInjectionPoint extends OrderedInjectionPoint
-{
+class PostConstructInjectionPoint extends OrderedInjectionPoint {
 	//----------------------               Public Methods               ----------------------//
-	public function new(methodName:String, parameters:Array<String>, requiredParameters:UInt, order:Int)
-	{
+	public function new(methodName:String, parameters:Array<String>, requiredParameters:UInt, order:Int) {
 		super(methodName, parameters, requiredParameters, order);
 	}
 }

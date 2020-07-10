@@ -12,8 +12,7 @@ import org.swiftsuspenders.errors.InjectorError;
 import org.swiftsuspenders.utils.CallProxy;
 
 @:keepSub
-class SingletonProvider implements DependencyProvider
-{
+class SingletonProvider implements DependencyProvider {
 	//----------------------       Private / Protected Properties       ----------------------//
 	private var _responseType:Class<Dynamic>;
 	private var _creatingInjector:Injector;
@@ -21,6 +20,7 @@ class SingletonProvider implements DependencyProvider
 	private var _destroyed:Bool;
 
 	//----------------------               Public Methods               ----------------------//
+
 	/**
 	 *
 	 * @param responseType The class the provider returns the same, lazily created, instance
@@ -28,8 +28,7 @@ class SingletonProvider implements DependencyProvider
 	 * @param creatingInjector The injector that was used to create the
 	 * <code>InjectionMapping</code> this DependencyProvider is associated with
 	 */
-	public function new(responseType:Class<Dynamic>, creatingInjector:Injector)
-	{
+	public function new(responseType:Class<Dynamic>, creatingInjector:Injector) {
 		_responseType = responseType;
 		_creatingInjector = creatingInjector;
 	}
@@ -40,31 +39,24 @@ class SingletonProvider implements DependencyProvider
 	 * @return The same, lazily created, instance of the class given to the SingletonProvider's
 	 * constructor on each invocation
 	 */
-	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic
-	{
+	public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic, Dynamic>):Dynamic {
 		if (_response == null) {
 			_response = createResponse(_creatingInjector);
 		}
 		return _response;
 	}
 
-
 	//----------------------         Private / Protected Methods        ----------------------//
-	private function createResponse(injector:Injector):Dynamic
-	{
-		if (_destroyed)
-		{
-			throw new InjectorError("Forbidden usage of unmapped singleton provider for type "
-				+ Type.getClassName(_responseType));
+	private function createResponse(injector:Injector):Dynamic {
+		if (_destroyed) {
+			throw new InjectorError("Forbidden usage of unmapped singleton provider for type " + Type.getClassName(_responseType));
 		}
 		return injector.instantiateUnmapped(_responseType);
 	}
 
-	public function destroy():Void
-	{
+	public function destroy():Void {
 		_destroyed = true;
-		if (_response != null && _creatingInjector != null && _creatingInjector.hasManagedInstance(_response))
-		{
+		if (_response != null && _creatingInjector != null && _creatingInjector.hasManagedInstance(_response)) {
 			_creatingInjector.destroyInstance(_response);
 		}
 		_creatingInjector = null;

@@ -10,21 +10,17 @@ package org.swiftsuspenders.dependencyproviders;
 import org.swiftsuspenders.Injector;
 
 @:keepSub
-class InjectorUsingProvider extends ForwardingProvider
-{
+class InjectorUsingProvider extends ForwardingProvider {
 	//----------------------              Public Properties             ----------------------//
 	public var injector:Injector;
 
 	//----------------------               Public Methods               ----------------------//
-	public function new(injector:Injector, provider:DependencyProvider)
-	{
+	public function new(injector:Injector, provider:DependencyProvider) {
 		super(provider);
 		this.injector = injector;
 	}
 
-	override public function apply(
-		targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic,Dynamic>):Dynamic
-	{
+	override public function apply(targetType:Class<Dynamic>, activeInjector:Injector, injectParameters:Map<Dynamic, Dynamic>):Dynamic {
 		return provider.apply(targetType, injector, injectParameters);
 	}
 }

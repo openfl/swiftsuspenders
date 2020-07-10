@@ -8,8 +8,7 @@
 package org.swiftsuspenders.mapping;
 
 @:keepSub
-interface UnsealedMapping
-{
+interface UnsealedMapping {
 	/**
 	 * @copy InjectionMapping#seal()
 	 */

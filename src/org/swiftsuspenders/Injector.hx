@@ -7,12 +7,17 @@
 
 package org.swiftsuspenders;
 
+#if openfl
+import openfl.system.ApplicationDomain;
+import openfl.events.EventDispatcher;
+#else
+import polyfill.system.ApplicationDomain;
+import polyfill.events.EventDispatcher;
+#end
 import org.swiftsuspenders.reflection.DescribeTypeRTTIReflector;
 import org.swiftsuspenders.reflection.MacroTypeReflector;
 import org.swiftsuspenders.utils.CallProxy;
 import org.swiftsuspenders.utils.UID;
-import openfl.events.EventDispatcher;
-import openfl.system.ApplicationDomain;
 import org.swiftsuspenders.dependencyproviders.DependencyProvider;
 import org.swiftsuspenders.dependencyproviders.FallbackDependencyProvider;
 import org.swiftsuspenders.dependencyproviders.LocalOnlyProvider;

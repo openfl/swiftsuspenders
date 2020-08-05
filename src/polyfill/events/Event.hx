@@ -1,13 +1,15 @@
-package openfl.events;
+package polyfill.events;
 
+#if openfl
+import openfl.events.Event as OpenFlEvent;
+typedef Event = OpenFlEvent;
+#else
 #if (openfl >= "8.8.0")
 import openfl._internal.utils.ObjectPool;
 #end
 import haxe.macro.Expr;
 
 class Event {
-	
-	
 	public static inline var ACTIVATE = "activate";
 	public static inline var ADDED = "added";
 	public static inline var ADDED_TO_STAGE = "addedToStage";
@@ -26,7 +28,7 @@ class Event {
 	public static inline var INIT = "init";
 	public static inline var MOUSE_LEAVE = "mouseLeave";
 	public static inline var OPEN = "open";
-    public static inline var PASTE = "paste";
+	public static inline var PASTE = "paste";
 	public static inline var REMOVED = "removed";
 	public static inline var REMOVED_FROM_STAGE = "removedFromStage";
 	public static inline var RENDER = "render";
@@ -39,128 +41,97 @@ class Event {
 	public static inline var TAB_INDEX_CHANGE = "tabIndexChange";
 	public static inline var TEXTURE_READY = "textureReady";
 	public static inline var UNLOAD = "unload";
-	
-	public var bubbles (default, null):Bool;
-	public var cancelable (default, null):Bool;
-	public var currentTarget (default, null):Dynamic;
-	public var eventPhase (default, null):EventPhase;
-	public var target (default, null):Dynamic;
-	public var type (default, null):String;
-    
-    #if (openfl >= "8.8.0")
-    @:noCompletion private static var __pool:ObjectPool<Event> = new ObjectPool<Event>(function() return new Event(null), function(event) event.__init());
-    #end
-	
+
+	public var bubbles(default, null):Bool;
+	public var cancelable(default, null):Bool;
+	public var currentTarget(default, null):Dynamic;
+	public var eventPhase(default, null):EventPhase;
+	public var target(default, null):Dynamic;
+	public var type(default, null):String;
+
+	#if (openfl >= "8.8.0")
+	@:noCompletion private static var __pool:ObjectPool<Event> = new ObjectPool<Event>(function() return new Event(null), function(event) event.__init());
+	#end
+
 	private var __isCanceled:Bool;
 	private var __isCanceledNow:Bool;
 	private var __preventDefault:Bool;
-	
-	
-	public function new (type:String, bubbles:Bool = false, cancelable:Bool = false) {
-		
+
+	public function new(type:String, bubbles:Bool = false, cancelable:Bool = false) {
 		this.type = type;
 		this.bubbles = bubbles;
 		this.cancelable = cancelable;
 		eventPhase = EventPhase.AT_TARGET;
-		
 	}
-	
-	
-	public function clone ():Event {
-		
-		var event = new Event (type, bubbles, cancelable);
+
+	public function clone():Event {
+		var event = new Event(type, bubbles, cancelable);
 		event.eventPhase = eventPhase;
 		event.target = target;
 		event.currentTarget = currentTarget;
 		return event;
-		
 	}
-	
-	
-	public function formatToString (className:String, ?p1:String, ?p2:String, ?p3:String, ?p4:String, ?p5:String):String {
-		
+
+	public function formatToString(className:String, ?p1:String, ?p2:String, ?p3:String, ?p4:String, ?p5:String):String {
 		var parameters = [];
-		if (p1 != null) parameters.push (p1);
-		if (p2 != null) parameters.push (p2);
-		if (p3 != null) parameters.push (p3);
-		if (p4 != null) parameters.push (p4);
-		if (p5 != null) parameters.push (p5);
-		
-		return Reflect.callMethod (this, __formatToString, [ className, parameters ]);
-		
+		if (p1 != null)
+			parameters.push(p1);
+		if (p2 != null)
+			parameters.push(p2);
+		if (p3 != null)
+			parameters.push(p3);
+		if (p4 != null)
+			parameters.push(p4);
+		if (p5 != null)
+			parameters.push(p5);
+
+		return Reflect.callMethod(this, __formatToString, [className, parameters]);
 	}
-	
-	
-	public function isDefaultPrevented ():Bool {
-		
+
+	public function isDefaultPrevented():Bool {
 		return __preventDefault;
-		
 	}
-	
-	
-	public function preventDefault ():Void {
-		
+
+	public function preventDefault():Void {
 		if (cancelable) {
-			
 			__preventDefault = true;
-			
 		}
-		
 	}
-	
-	
-	public function stopImmediatePropagation ():Void {
-		
+
+	public function stopImmediatePropagation():Void {
 		__isCanceled = true;
 		__isCanceledNow = true;
-		
 	}
-	
-	
-	public function stopPropagation ():Void {
-		
+
+	public function stopPropagation():Void {
 		__isCanceled = true;
-		
 	}
-	
-	
-	public function toString ():String {
-		
-		return __formatToString ("Event",  [ "type", "bubbles", "cancelable" ]);
-		
+
+	public function toString():String {
+		return __formatToString("Event", ["type", "bubbles", "cancelable"]);
 	}
-	
-	
-	private function __formatToString (className:String, parameters:Array<String>):String {
-		
+
+	private function __formatToString(className:String, parameters:Array<String>):String {
 		// TODO: Make this a macro function, and handle at compile-time, with rest parameters?
-		
+
 		var output = '[$className';
 		var arg:Dynamic = null;
-		
+
 		for (param in parameters) {
-			
-			arg = Reflect.field (this, param);
-			
-			if (Std.is (arg, String)) {
-				
+			arg = Reflect.field(this, param);
+
+			if (Std.is(arg, String)) {
 				output += ' $param="$arg"';
-				
 			} else {
-				
 				output += ' $param=$arg';
-				
 			}
-			
 		}
-		
+
 		output += "]";
 		return output;
-		
 	}
-    
-    @:noCompletion private function __init():Void
-	{
+
+	@:noCompletion private function __init():Void {
 		// type = null;
 		bubbles = false;
 		cancelable = false;
@@ -170,3 +141,4 @@ class Event {
 		__preventDefault = false;
 	}
 }
+#end

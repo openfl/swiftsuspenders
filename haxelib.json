@@ -1,10 +1,10 @@
 {
 	"name": "swiftsuspenders",
-	"url": "http://blog.peteshand.net/robotlegs-for-haxe",
+	"url": "http://peteshand.net/robotlegs-for-haxe",
 	"license": "MIT",
 	"tags": [ "dependency-injection", "openfl","flash", "js", "web" ],
 	"description": "This is an OpenFL 2.x/Haxe port of the popular AS3 metadata driven IOC (Inversion Of Control) solution SwiftSuspenders",
-	"version": "1.0.13",
+	"version": "1.1.0",
 	"releasenote": "move openfl dependencies from robotlegs into swiftsuspenders, minor code cleanup and readme update",
 	"contributors": [ "p.j.shand", "tbyrne" ],
 	"dependencies": {

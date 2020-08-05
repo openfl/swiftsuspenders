@@ -7,7 +7,7 @@
 
 package org.swiftsuspenders;
 
-import openfl.events.Event;
+import polyfill.events.Event;
 
 @:keepSub
 class InjectionEvent extends Event {

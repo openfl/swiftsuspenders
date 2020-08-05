@@ -7,7 +7,7 @@
 
 package org.swiftsuspenders.mapping;
 
-import openfl.events.Event;
+import polyfill.events.Event;
 
 @:keepSub
 class MappingEvent extends Event {

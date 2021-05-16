@@ -120,7 +120,7 @@ class Event {
 		for (param in parameters) {
 			arg = Reflect.field(this, param);
 
-			if (Std.is(arg, String)) {
+			if (Std.isOfType(arg, String)) {
 				output += ' $param="$arg"';
 			} else {
 				output += ' $param=$arg';

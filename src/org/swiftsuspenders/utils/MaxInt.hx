@@ -12,7 +12,7 @@ class MaxInt {
 		return untyped __global__['int'].MAX_VALUE;
 	#elseif js
 	static inline function get_INT_MAX():Int
-		return untyped __js__('Number.MAX_VALUE');
+		return untyped js.Syntax.code('Number.MAX_VALUE');
 	#elseif cs
 	static inline function get_INT_MAX():Int
 		return untyped __cs__('int.MaxValue');

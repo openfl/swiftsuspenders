@@ -630,12 +630,12 @@ class Injector extends EventDispatcher {
 			var provider:DependencyProvider = injector.providerMappings[mappingId];
 
 			if (provider != null) {
-				if (Std.is(provider, SoftDependencyProvider)) {
+				if (Std.isOfType(provider, SoftDependencyProvider)) {
 					softProvider = provider;
 					injector = injector.parentInjector;
 					continue;
 				}
-				if (Std.is(provider, LocalOnlyProvider) && injector != this) {
+				if (Std.isOfType(provider, LocalOnlyProvider) && injector != this) {
 					injector = injector.parentInjector;
 					continue;
 				}

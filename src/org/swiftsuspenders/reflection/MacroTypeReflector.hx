@@ -33,7 +33,7 @@ class MacroTypeReflector implements Reflector {
 
 	public function getFQCN(value:Dynamic, replaceColons:Bool = false):String {
 		var fqcn:String;
-		if (Std.is(value, String)) {
+		if (Std.isOfType(value, String)) {
 			fqcn = value;
 			// Add colons if missing and desired.
 			if (!replaceColons && fqcn.indexOf('::') == -1) {
@@ -60,9 +60,9 @@ class MacroTypeReflector implements Reflector {
 	public function classExtendsOrImplements(classOrClassName:Dynamic, superClass:Class<Dynamic>):Bool {
 		var actualClass:Class<Dynamic> = null;
 
-		if (Std.is(classOrClassName, Class)) {
+		if (Std.isOfType(classOrClassName, Class)) {
 			actualClass = cast(classOrClassName, Class<Dynamic>);
-		} else if (Std.is(classOrClassName, String)) {
+		} else if (Std.isOfType(classOrClassName, String)) {
 			try {
 				actualClass = Type.resolveClass(cast(classOrClassName, String));
 			} catch (e:Dynamic) {
@@ -75,6 +75,6 @@ class MacroTypeReflector implements Reflector {
 		}
 
 		var classInstance = Type.createEmptyInstance(actualClass);
-		return Std.is(classInstance, superClass);
+		return Std.isOfType(classInstance, superClass);
 	}
 }

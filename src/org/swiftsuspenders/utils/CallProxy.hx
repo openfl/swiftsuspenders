@@ -11,7 +11,7 @@ class CallProxy {
 	public static function hasField(o:Dynamic, field:String):Bool {
 		var fields;
 		var clazz:Class<Dynamic>;
-		if (Std.is(o, Class)) {
+		if (Std.isOfType(o, Class)) {
 			clazz = o;
 			fields = Type.getInstanceFields(clazz);
 		} else {
@@ -25,7 +25,7 @@ class CallProxy {
 
 		#if (js)
 		var f:Dynamic = Reflect.getProperty(o, field);
-		if (untyped __js__('"undefined" !== typeof f'))
+		if (untyped js.Syntax.code('"undefined" !== typeof f'))
 			return true;
 		else
 			return false;

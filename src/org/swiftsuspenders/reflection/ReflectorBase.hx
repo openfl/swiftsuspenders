@@ -23,8 +23,8 @@ class ReflectorBase {
 		For these, we have to fall back to more verbose ways of getting the constructor.
 	 */
 	{
-		// if (Std.is(value, Proxy) || Std.is(value, Float) || Std.is(value, FastXML) || Std.is(value, FastXMLList) || Std.is(value, Array/*Vector.<T> call?*/))
-		if (Std.is(value, Proxy) || Std.is(value, Float) || Std.is(value, Xml) || Std.is(value, Array)) {
+		// if (Std.isOfType(value, Proxy) || Std.isOfType(value, Float) || Std.isOfType(value, FastXML) || Std.isOfType(value, FastXMLList) || Std.isOfType(value, Array/*Vector.<T> call?*/))
+		if (Std.isOfType(value, Proxy) || Std.isOfType(value, Float) || Std.isOfType(value, Xml) || Std.isOfType(value, Array)) {
 			return Type.resolveClass(Type.getClassName(value));
 		}
 		return value.constructor;
@@ -32,7 +32,7 @@ class ReflectorBase {
 
 	public function getFQCN(value:Dynamic, replaceColons:Bool = false):String {
 		var fqcn:String;
-		if (Std.is(value, String)) {
+		if (Std.isOfType(value, String)) {
 			fqcn = value;
 			// Add colons if missing and desired.
 			if (!replaceColons && fqcn.indexOf("::") == -1) {

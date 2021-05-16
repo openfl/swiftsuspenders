@@ -301,7 +301,7 @@ class InjectionMapping implements ProviderlessMapping implements UnsealedMapping
 	 */
 	public function getProvider():DependencyProvider {
 		var provider:DependencyProvider = _creatingInjector.providerMappings[_mappingId];
-		while (Std.is(provider, ForwardingProvider)) {
+		while (Std.isOfType(provider, ForwardingProvider)) {
 			provider = cast(provider, ForwardingProvider).provider;
 		}
 		return provider;

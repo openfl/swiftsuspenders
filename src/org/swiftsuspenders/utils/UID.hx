@@ -25,7 +25,7 @@ class UID {
 
 	public static function classID(source:Dynamic):String {
 		var className = "";
-		if (Std.is(source, Class)) {
+		if (Std.isOfType(source, Class)) {
 			className = Type.getClassName(source);
 		} else if (Type.getClass(source) != null) {
 			className = Type.getClassName(Type.getClass(source));

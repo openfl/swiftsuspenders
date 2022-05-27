@@ -322,8 +322,17 @@ class DescribeTypeRTTIReflector implements Reflector {
 		for (elem in _currentFactoryXMLFast.elements) {
 			if (elem.name == propertyName) {
 				var pathFast = new Access(elem.x.firstElement());
-				if (pathFast.has.path)
+				if (pathFast.has.path) {
 					value = pathFast.att.path;
+					#if (openfl && flash)
+					// when targeting flash, if the openfl package is
+					// encountered in rtti, use the flash package instead
+					// example: openfl.events.IEventDispatcher should become flash.events.IEventDispatcher
+					if (StringTools.startsWith(value, "openfl.")) {
+						value = "flash." + value.substr(7);
+					}
+					#end
+				}
 				break;
 			}
 		}
